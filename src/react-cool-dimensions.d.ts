@@ -1,0 +1,3 @@
+declare module "react-cool-dimensions" {
+  // Coming soon...
+}
