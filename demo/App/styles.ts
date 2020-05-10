@@ -11,8 +11,8 @@ export const root = css`
 `;
 
 export const container = css`
-  padding: 5rem 5%;
   text-align: center;
+  padding: 5rem 5%;
   ${sm} {
     padding-left: 10%;
     padding-right: 10%;
@@ -33,4 +33,19 @@ export const title = css`
 
 export const subtitle = css`
   margin: 0 0 2.5rem;
+`;
+
+export const box = css`
+  position: relative;
+  background: orange;
+`;
+
+export const dot = css`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  background: blue;
+  cursor: pointer;
 `;
