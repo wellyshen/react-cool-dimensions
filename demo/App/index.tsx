@@ -32,9 +32,13 @@ const App: FC<{}> = () => {
 
   const handleMouseDown = (): void => {
     document.addEventListener("mousemove", handleResize);
-    document.addEventListener("mouseup", () => {
-      document.removeEventListener("mousemove", handleResize);
-    });
+    document.addEventListener(
+      "mouseup",
+      () => {
+        document.removeEventListener("mousemove", handleResize);
+      },
+      { once: true }
+    );
   };
 
   return (
