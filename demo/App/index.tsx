@@ -29,8 +29,8 @@ const App: FC<{}> = () => {
   // console.log("LOG ===> ", width, height, entry);
 
   const handleResize = (e: MouseEvent): void => {
-    const { left: offsetW, top: offsetH } = ref.current.getBoundingClientRect();
-    setSize({ w: e.pageX - offsetW, h: e.pageY - offsetH });
+    const { left: offsetX, top: offsetY } = ref.current.getBoundingClientRect();
+    setSize({ w: e.pageX - offsetX, h: e.pageY - offsetY });
   };
 
   const handleMouseDown = (): void => {
