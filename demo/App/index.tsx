@@ -6,12 +6,12 @@ import GitHubCorner from "../GitHubCorner";
 import useDimensions from "../../src";
 import { root, container, title, subtitle, frame, controller } from "./styles";
 
-const defaultSize = 300;
+const defaultSz = 300;
 
 const App: FC<{}> = () => {
   const [size, setSize] = useState<{ w: number; h: number }>({
-    w: defaultSize,
-    h: defaultSize,
+    w: defaultSz,
+    h: defaultSz,
   });
   const ref = useRef<HTMLDivElement>();
   const { width, height, entry, observe, unobserve } = useDimensions(ref, {
@@ -57,7 +57,7 @@ const App: FC<{}> = () => {
         <div
           css={frame}
           style={{
-            left: `${window.innerWidth / 2 - defaultSize / 2}px`,
+            left: `${window.innerWidth / 2 - defaultSz / 2}px`,
             width: `${size.w}px`,
             height: `${size.h}px`,
           }}
