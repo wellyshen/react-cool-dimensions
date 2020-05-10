@@ -1,3 +1,3 @@
 # React Cool Dimensions
 
-Coming soon...
+🚧 Under developing, please be patient.
