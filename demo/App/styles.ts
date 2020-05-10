@@ -35,17 +35,19 @@ export const subtitle = css`
   margin: 0 0 2.5rem;
 `;
 
-export const box = css`
-  position: relative;
-  background: orange;
+export const frame = css`
+  position: absolute;
+  border: 1px solid #777;
 `;
 
-export const dot = css`
+export const controller = css`
   position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 150px;
-  height: 150px;
-  background: blue;
-  cursor: pointer;
+  right: -5px;
+  bottom: -5px;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-radius: 50%;
+  border: 1px solid #777;
+  cursor: nwse-resize;
 `;
