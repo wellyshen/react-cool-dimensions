@@ -6,9 +6,8 @@ import GitHubCorner from "../GitHubCorner";
 import useDimensions from "../../src";
 import { root, container, title, subtitle, frame, controller } from "./styles";
 
-const defaultVal = 300;
-
 const App: FC<{}> = () => {
+  const defaultVal = 300;
   const [size, setSize] = useState<{ w: number; h: number }>({
     w: defaultVal,
     h: defaultVal,
