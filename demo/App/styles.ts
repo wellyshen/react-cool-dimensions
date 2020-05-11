@@ -42,10 +42,10 @@ export const frame = css`
 
 export const controller = css`
   position: absolute;
-  right: -5px;
-  bottom: -5px;
-  width: 10px;
-  height: 10px;
+  right: -8px;
+  bottom: -8px;
+  width: 16px;
+  height: 16px;
   background: #fff;
   border-radius: 50%;
   border: 1px solid #777;

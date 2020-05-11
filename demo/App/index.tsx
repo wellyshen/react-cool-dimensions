@@ -25,20 +25,39 @@ const App: FC<{}> = () => {
 
   // console.log("LOG ===> ", width, height, entry);
 
-  const handleResize = (e: MouseEvent): void => {
+  const resize = (x: number, y: number): void => {
     const { left: offsetX, top: offsetY } = ref.current.getBoundingClientRect();
-    setSize({ w: e.pageX - offsetX, h: e.pageY - offsetY });
+    setSize({ w: x - offsetX, h: y - offsetY });
   };
 
-  const handleMouseDown = (): void => {
-    document.addEventListener("mousemove", handleResize);
-    document.addEventListener(
-      "mouseup",
-      () => {
-        document.removeEventListener("mousemove", handleResize);
-      },
-      { once: true }
-    );
+  const handleMouseMove = (e: MouseEvent): void => {
+    resize(e.pageX, e.pageY);
+  };
+
+  const handleTouchMove = (e: TouchEvent): void => {
+    resize(e.touches[0].pageX, e.touches[0].pageY);
+  };
+
+  const handleDragStart = (): void => {
+    if (typeof window.ontouchstart === "undefined") {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener(
+        "mouseup",
+        () => {
+          document.removeEventListener("mousemove", handleMouseMove);
+        },
+        { once: true }
+      );
+    } else {
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener(
+        "touchmove",
+        () => {
+          document.removeEventListener("mousemove", handleTouchMove);
+        },
+        { once: true }
+      );
+    }
   };
 
   return (
@@ -65,7 +84,11 @@ const App: FC<{}> = () => {
           ref={ref}
         >
           {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-          <div css={controller} onMouseDown={handleMouseDown} />
+          <div
+            css={controller}
+            onMouseDown={handleDragStart}
+            onTouchStart={handleDragStart}
+          />
         </div>
       </div>
     </>
