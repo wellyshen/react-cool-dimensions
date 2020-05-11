@@ -5,6 +5,7 @@ export const observerErr =
   "💡react-cool-dimensions: the browser doesn't support Resize Observer, please use polyfill: https://github.com/wellyshen/react-cool-dimensions#TBD";
 
 interface Event {
+  breakpoint?: string;
   width?: number;
   height?: number;
   entry?: ResizeObserverEntry;
@@ -15,27 +16,31 @@ interface OnResize {
   (event?: Event): void;
 }
 interface Options {
+  breakpoints?: { [key: string]: number };
   onResize?: OnResize;
 }
 interface Return {
-  readonly width?: number;
-  readonly height?: number;
+  readonly breakpoint?: string;
+  readonly width: number;
+  readonly height: number;
   readonly entry?: ResizeObserverEntry;
   readonly observe: () => void;
   readonly unobserve: () => void;
 }
 interface State {
-  width?: number;
-  height?: number;
+  breakpoint?: string;
+  width: number;
+  height: number;
   entry?: ResizeObserverEntry;
 }
 
 const useDimensions = (
   ref: RefObject<HTMLElement>,
-  { onResize }: Options = {}
+  { breakpoints, onResize }: Options = {}
 ): Return => {
-  const [state, setState] = useState<State>({});
-  const prevSizeRef = useRef<Omit<State, "entry">>({});
+  const [state, setState] = useState<State>({ width: 0, height: 0 });
+  const prevSizeRef = useRef<{ width?: number; height?: number }>({});
+  const prevBreakpointRef = useRef<string>("");
   const isObservingRef = useRef<boolean>(false);
   const observerRef = useRef<ResizeObserver>(null);
   const onResizeRef = useRef<OnResize>(null);
@@ -84,10 +89,33 @@ const useDimensions = (
 
       prevSizeRef.current = { width, height };
 
-      if (onResizeRef.current)
-        onResizeRef.current({ width, height, entry, observe, unobserve });
+      const e = { width, height, entry, observe, unobserve };
+      let breakpoint;
 
-      setState({ width, height, entry });
+      if (onResizeRef.current) {
+        if (breakpoints) {
+          breakpoint = "";
+          let max = 0;
+
+          Object.keys(breakpoints).forEach((key: string) => {
+            const val = breakpoints[key];
+
+            if (width >= val && val > max) {
+              breakpoint = key;
+              max = val;
+            }
+          });
+
+          if (breakpoint && breakpoint !== prevBreakpointRef.current) {
+            onResizeRef.current({ ...e, breakpoint });
+            prevBreakpointRef.current = breakpoint;
+          }
+        } else {
+          onResizeRef.current(e);
+        }
+      }
+
+      setState({ breakpoint, width, height, entry });
     });
 
     observe();
@@ -95,7 +123,8 @@ const useDimensions = (
     return (): void => {
       unobserve();
     };
-  }, [ref, onResize, observe, unobserve]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref, JSON.stringify(breakpoints), observe, unobserve]);
 
   return { ...state, observe, unobserve };
 };
