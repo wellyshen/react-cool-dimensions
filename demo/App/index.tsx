@@ -12,7 +12,7 @@ const App: FC<{}> = () => {
   const [size, setSize] = useState<{ w: number; h: number }>({ w: sz, h: sz });
   const ref = useRef<HTMLDivElement>();
   const {
-    breakpoint,
+    currentBreakpoint,
     width,
     height,
     entry,
@@ -21,18 +21,18 @@ const App: FC<{}> = () => {
   } = useDimensions(ref, {
     breakpoints: { T1: 300, T2: 100, T3: 200, T4: 400 },
     onResize: ({
-      breakpoint: bp,
+      currentBreakpoint: curBp,
       width: w,
       height: h,
       entry: en,
       observe: ob,
       unobserve: unob,
     }) => {
-      console.log("LOG ===> onResize: ", bp, w, h, en);
+      console.log("LOG ===> onResize: ", curBp, w, h, en);
     },
   });
 
-  // console.log("LOG ===> ", breakpoint, width, height, entry);
+  // console.log("LOG ===> ", currentBreakpoint, width, height, entry);
 
   const resize = (x: number, y: number): void => {
     const { left: offsetX, top: offsetY } = ref.current.getBoundingClientRect();

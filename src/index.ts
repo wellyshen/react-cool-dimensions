@@ -5,7 +5,7 @@ export const observerErr =
   "💡react-cool-dimensions: the browser doesn't support Resize Observer, please use polyfill: https://github.com/wellyshen/react-cool-dimensions#TBD";
 
 interface Event {
-  breakpoint?: string;
+  currentBreakpoint?: string;
   width?: number;
   height?: number;
   entry?: ResizeObserverEntry;
@@ -15,12 +15,13 @@ interface Event {
 interface OnResize {
   (event?: Event): void;
 }
+type Breakpoints = { [key: string]: number };
 interface Options {
-  breakpoints?: { [key: string]: number };
+  breakpoints?: Breakpoints;
   onResize?: OnResize;
 }
 interface Return {
-  readonly breakpoint?: string;
+  readonly currentBreakpoint?: string;
   readonly width: number;
   readonly height: number;
   readonly entry?: ResizeObserverEntry;
@@ -28,11 +29,27 @@ interface Return {
   readonly unobserve: () => void;
 }
 interface State {
-  breakpoint?: string;
+  currentBreakpoint?: string;
   width: number;
   height: number;
   entry?: ResizeObserverEntry;
 }
+
+const getCurrentBreakpoint = (bps: Breakpoints, w: number): string => {
+  let curBp = "";
+  let max = 0;
+
+  Object.keys(bps).forEach((key: string) => {
+    const val = bps[key];
+
+    if (w >= val && val > max) {
+      curBp = key;
+      max = val;
+    }
+  });
+
+  return curBp;
+};
 
 const useDimensions = (
   ref: RefObject<HTMLElement>,
@@ -40,7 +57,7 @@ const useDimensions = (
 ): Return => {
   const [state, setState] = useState<State>({ width: 0, height: 0 });
   const prevSizeRef = useRef<{ width?: number; height?: number }>({});
-  const prevBreakpointRef = useRef<string>("");
+  const prevCurrentBreakpointRef = useRef<string>();
   const isObservingRef = useRef<boolean>(false);
   const observerRef = useRef<ResizeObserver>(null);
   const onResizeRef = useRef<OnResize>(null);
@@ -90,32 +107,22 @@ const useDimensions = (
       prevSizeRef.current = { width, height };
 
       const e = { width, height, entry, observe, unobserve };
-      let breakpoint;
+      let currentBreakpoint = breakpoints ? "" : undefined;
 
       if (onResizeRef.current) {
         if (breakpoints) {
-          breakpoint = "";
-          let max = 0;
+          currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
 
-          Object.keys(breakpoints).forEach((key: string) => {
-            const val = breakpoints[key];
-
-            if (width >= val && val > max) {
-              breakpoint = key;
-              max = val;
-            }
-          });
-
-          if (breakpoint && breakpoint !== prevBreakpointRef.current) {
-            onResizeRef.current({ ...e, breakpoint });
-            prevBreakpointRef.current = breakpoint;
+          if (currentBreakpoint !== prevCurrentBreakpointRef.current) {
+            onResizeRef.current({ ...e, currentBreakpoint });
+            prevCurrentBreakpointRef.current = currentBreakpoint;
           }
         } else {
           onResizeRef.current(e);
         }
       }
 
-      setState({ breakpoint, width, height, entry });
+      setState({ currentBreakpoint, width, height, entry });
     });
 
     observe();
