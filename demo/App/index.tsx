@@ -83,7 +83,8 @@ const App: FC<{}> = () => {
         <GitHubCorner url="https://github.com/wellyshen/react-cool-dimensions" />
         <h1 css={title}>React Cool Dimensions</h1>
         <p css={subtitle}>
-          React hook to measure an element&apos;s size, uses ResizeObserver.
+          React hook to measure an element&apos;s size and handle responsive
+          components.
         </p>
         <div
           css={frame}
