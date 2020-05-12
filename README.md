@@ -11,7 +11,7 @@
 - [x] Support and monitor element's size
 - [x] Support event callback by breakpoints, like [container queries](https://wicg.github.io/cq-usecases)
 - [x] Support polyfill
-- [ ] TypeScript type definition
+- [x] TypeScript type definition
 - [ ] Server-side compatibility
 - [ ] Unit testing
 - [ ] Demo app
