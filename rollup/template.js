@@ -15,7 +15,7 @@ export default ({ files }) => `
       <meta property="og:title" content="React Cool Dimensions" />
       <meta property="og:type" content="website" />
       <meta property="og:image" content="https://react-cool-dimensions.netlify.app/assets/og_image.png" />
-      <meta property="og:description" content="React hook to measure and monitor an element's size." />
+      <meta property="og:description" content="React hook to measure an element's size, uses ResizeObserver." />
       <meta property="og:url" content="https://react-cool-dimensions.netlify.app" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@react-cool-dimensions" />
