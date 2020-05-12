@@ -1,7 +1,7 @@
 {
   "name": "react-cool-dimensions",
   "version": "0.0.0",
-  "description": "React hook to measure an element's size, uses ResizeObserver.",
+  "description": "React hook to measure an element's size and handle responsive components.",
   "license": "MIT",
   "homepage": "https://react-cool-dimensions.netlify.com",
   "repository": "https://github.com/wellyshen/react-cool-dimensions",
@@ -18,6 +18,8 @@
     "dimensions",
     "measure",
     "size",
+    "responsive-components",
+    "container-queries",
     "typescript"
   ],
   "author": "Welly Shen <hivoid19@gmail.com> (https://github.com/wellyshen)",
