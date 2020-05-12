@@ -42,6 +42,7 @@ const App: FC<{}> = () => {
   };
 
   const handleMouseMove = (e: MouseEvent): void => {
+    e.preventDefault();
     resize(e.pageX, e.pageY);
   };
 
