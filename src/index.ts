@@ -19,6 +19,7 @@ type Breakpoints = { [key: string]: number };
 interface Options {
   breakpoints?: Breakpoints;
   onResize?: OnResize;
+  polyfill?: any;
 }
 interface Return {
   readonly currentBreakpoint?: string;
@@ -36,7 +37,7 @@ interface State {
 }
 
 const getCurrentBreakpoint = (bps: Breakpoints, w: number): string => {
-  let curBp = "";
+  let curBp;
   let max = 0;
 
   Object.keys(bps).forEach((key: string) => {
@@ -53,11 +54,11 @@ const getCurrentBreakpoint = (bps: Breakpoints, w: number): string => {
 
 const useDimensions = (
   ref: RefObject<HTMLElement>,
-  { breakpoints, onResize }: Options = {}
+  { breakpoints, onResize, polyfill }: Options = {}
 ): Return => {
   const [state, setState] = useState<State>({ width: 0, height: 0 });
   const prevSizeRef = useRef<{ width?: number; height?: number }>({});
-  const prevCurrentBreakpointRef = useRef<string>();
+  const prevBreakpointRef = useRef<string>();
   const isObservingRef = useRef<boolean>(false);
   const observerRef = useRef<ResizeObserver>(null);
   const onResizeRef = useRef<OnResize>(null);
@@ -83,47 +84,55 @@ const useDimensions = (
   useEffect(() => {
     if (!ref || !ref.current) return (): void => null;
 
-    if (!("ResizeObserver" in window) || !("ResizeObserverEntry" in window)) {
+    if (
+      (!("ResizeObserver" in window) || !("ResizeObserverEntry" in window)) &&
+      !polyfill
+    ) {
       console.error(observerErr);
       return (): void => null;
     }
 
-    // eslint-disable-next-line compat/compat
-    observerRef.current = new ResizeObserver(([entry]) => {
-      const { contentBoxSize, contentRect } = entry;
-      const width = contentBoxSize
-        ? contentBoxSize.inlineSize
-        : contentRect.width;
-      const height = contentBoxSize
-        ? contentBoxSize.blockSize
-        : contentRect.height;
+    observerRef.current = new (ResizeObserver || polyfill)(
+      ([entry]: ResizeObserverEntry[]) => {
+        const { contentBoxSize, contentRect } = entry;
+        // ResizeObserver polyfill has different data structure
+        const contentBoxSz = Array.isArray(contentBoxSize)
+          ? contentBoxSize[0]
+          : contentBoxSize;
+        const width = contentBoxSz
+          ? contentBoxSz.inlineSize
+          : contentRect.width;
+        const height = contentBoxSz
+          ? contentBoxSz.blockSize
+          : contentRect.height;
 
-      if (
-        width === prevSizeRef.current.width &&
-        height === prevSizeRef.current.height
-      )
-        return;
+        if (
+          width === prevSizeRef.current.width &&
+          height === prevSizeRef.current.height
+        )
+          return;
 
-      prevSizeRef.current = { width, height };
+        prevSizeRef.current = { width, height };
 
-      const e = { width, height, entry, observe, unobserve };
-      let currentBreakpoint = breakpoints ? "" : undefined;
+        const e = { width, height, entry, observe, unobserve };
+        let currentBreakpoint;
 
-      if (onResizeRef.current) {
-        if (breakpoints) {
-          currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
+        if (onResizeRef.current) {
+          if (breakpoints) {
+            currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
 
-          if (currentBreakpoint !== prevCurrentBreakpointRef.current) {
-            onResizeRef.current({ ...e, currentBreakpoint });
-            prevCurrentBreakpointRef.current = currentBreakpoint;
+            if (currentBreakpoint !== prevBreakpointRef.current) {
+              onResizeRef.current({ ...e, currentBreakpoint });
+              prevBreakpointRef.current = currentBreakpoint;
+            }
+          } else {
+            onResizeRef.current(e);
           }
-        } else {
-          onResizeRef.current(e);
         }
-      }
 
-      setState({ currentBreakpoint, width, height, entry });
-    });
+        setState({ currentBreakpoint, width, height, entry });
+      }
+    );
 
     observe();
 
