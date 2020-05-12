@@ -1,8 +1,7 @@
 import { RefObject, useState, useRef, useEffect, useCallback } from "react";
 
-// FIXME: use correct URL
 export const observerErr =
-  "💡react-cool-dimensions: the browser doesn't support Resize Observer, please use polyfill: https://github.com/wellyshen/react-cool-dimensions#TBD";
+  "💡react-cool-dimensions: the browser doesn't support Resize Observer, please use polyfill: https://github.com/wellyshen/react-cool-dimensions#resizeobserver-polyfill";
 
 interface Event {
   currentBreakpoint?: string;
