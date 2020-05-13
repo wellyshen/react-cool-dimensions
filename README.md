@@ -32,7 +32,7 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 
 To use `react-cool-dimensions`, you must use `react@16.8.0` or greater which includes hooks.
 
-<!-- ## Installation
+## Installation
 
 This package is distributed via [npm](https://www.npmjs.com/package/react-cool-dimensions).
 
@@ -40,15 +40,37 @@ This package is distributed via [npm](https://www.npmjs.com/package/react-cool-d
 $ yarn add react-cool-dimensions
 # or
 $ npm install --save react-cool-dimensions
-``` -->
+```
 
 ## Usage
 
-This hook relies on [ResizeObserver API](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver), which has been supported by [most modern browsers](https://caniuse.com/#feat=resizeobserver). You can also use [polyfill](#resizeobserver-polyfill) for full browser support.
+`react-cool-dimensions` has a flexible [API](#api) design, it can cover simple to complex use cases for you. Here are some example to show you how does it work.
+
+> ⚠️ [Most modern browsers support ResizeObserver natively](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver). You can also use [polyfill](#resizeobserver-polyfill) for full browser support.
 
 ### Basic Use Case
 
-Coming soon...
+To report the size of an element by the `width` and `height` states.
+
+```js
+import React, { useRef } from "react";
+import useDimensions from "react-cool-dimensions";
+
+const App = () => {
+  const ref = useRef();
+  const { width, height, entry, unobserve, observe } = useDimensions(ref, {
+    onResize: ({ width, height, entry, unobserve, observe }) => {
+      // Triggered when the size of the target has been changed
+    },
+  });
+
+  return (
+    <div ref={ref}>
+      Hi! My width is {width}px and height is {height}px
+    </div>
+  );
+};
+```
 
 ### Responsive Components
 
