@@ -1,7 +1,6 @@
 import React, { FC, useState, useRef } from "react";
 import { Global, css } from "@emotion/core";
 import normalize from "normalize.css";
-import ResizeObserver from "resize-observer-polyfill";
 
 import GitHubCorner from "../GitHubCorner";
 import useDimensions from "../../src";
@@ -31,7 +30,6 @@ const App: FC<{}> = () => {
     }) => {
       console.log("LOG ===> onResize: ", curBp, w, h, en);
     },
-    polyfill: ResizeObserver,
   });
 
   // console.log("LOG ===> ", currentBreakpoint, width, height, entry);

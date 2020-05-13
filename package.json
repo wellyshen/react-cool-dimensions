@@ -163,7 +163,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-test-renderer": "^16.13.1",
-    "resize-observer-polyfill": "^1.5.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.9.1",
     "rollup-plugin-babel": "^4.4.0",
