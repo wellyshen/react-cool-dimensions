@@ -112,7 +112,31 @@ Coming soon...
 
 ## ResizeObserver Polyfill
 
-Coming soon...
+[ResizeObserver has good support amongst browsers](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver), but it's not universal. You'll need to use polyfill for browsers that don't support it. Polyfills is something you should do consciously at the application level. Therefore `react-cool-dimensions` doesn't include it.
+
+We recommend using [resize-observer-polyfill](https://github.com/que-etc/resize-observer-polyfill):
+
+```sh
+$ yarn add resize-observer-polyfill
+# or
+$ npm install --save resize-observer-polyfill
+```
+
+Then inject it by the `polyfill` option:
+
+```js
+import ResizeObserver from "resize-observer-polyfill";
+
+const { width, height } = useDimensions(ref, { polyfill: ResizeObserver });
+```
+
+Or pollute the `window` object:
+
+```js
+import ResizeObserver from "resize-observer-polyfill";
+
+if (!window.ResizeObserver) window.ResizeObserver = ResizeObserver;
+```
 
 ## Performance Issues
 
