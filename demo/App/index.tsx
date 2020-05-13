@@ -1,7 +1,7 @@
 import React, { FC, useState, useRef } from "react";
 import { Global, css } from "@emotion/core";
 import normalize from "normalize.css";
-import { ResizeObserver } from "@juggle/resize-observer";
+import ResizeObserver from "resize-observer-polyfill";
 
 import GitHubCorner from "../GitHubCorner";
 import useDimensions from "../../src";
