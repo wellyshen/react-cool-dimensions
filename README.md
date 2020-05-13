@@ -74,7 +74,37 @@ const App = () => {
 
 ### Responsive Components
 
-Coming soon...
+We have [media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries) but those are based on the browser viewport not individual elements. In some case, we'd like to style components based on the width of a containing element rather than the browser viewport. To meet this demand there's a [proposal](https://wicg.github.io/container-queries) for **container queries**, but it still doesn't exist today...
+
+No worries, `react-cool-dimensions` provides an alternative solution for us! We can activate the **responsive mode** by the `breakpoints` option. It's a width-based solution, once we active it we can apply different styles to a component according to the `currentBreakpoint` state.
+
+```js
+import React, { useRef } from "react";
+import useDimensions from "react-cool-dimensions";
+
+const App = () => {
+  const ref = useRef();
+  const { currentBreakpoint } = useDimensions(ref, {
+    // The "currentBreakpoint" will be the object key based on the target's width
+    // for instance, 0px - 319px (currentBreakpoint = xs), 320px - 479px (currentBreakpoint = sm) and so on
+    breakpoints: { xs: 0, sm: 320, md: 480, lg: 640 },
+    onResize: ({ currentBreakpoint }) => {
+      // Now the event callback will only be triggered once for each breakpoint
+      // we can also access the "currentBreakpoint" here
+    },
+  });
+
+  return (
+    <div class={`card ${currentBreakpoint}`} ref={ref}>
+      <div class="card-header">I'm 😎</div>
+      <div class="card-body">I'm 👕</div>
+      <div class="card-footer">I'm 👟</div>
+    </div>
+  );
+};
+```
+
+> Note: If the `breakpoints` option isn't set or there's on the defined breakpoint (object key) for a range of width. The `currentBreakpoint` will be `undefined`.
 
 ## API
 
