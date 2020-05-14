@@ -112,7 +112,7 @@ const App = () => {
 
 ## Performance Optimization
 
-The `onResize` event will be triggered whenever the size of the target element is being changed. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own `throttled/debounced` function as below.
+The `onResize` event will be triggered whenever the size of the target element is being changed. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own `throttle/debounce` function as below.
 
 ```js
 import _ from "lodash";
