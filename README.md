@@ -106,6 +106,20 @@ const App = () => {
 
 > Note: If the `breakpoints` option isn't set or there's on the defined breakpoint (object key) for a range of width. The `currentBreakpoint` will be `undefined`.
 
+## Performance Optimization
+
+The `onResize` event will be triggered when the target element is being resized. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own throttled/debounced function as below.
+
+```js
+import _ from "lodash";
+
+const { width, height } = useDimensions(ref, {
+  onResize: _.throttle(() => {
+    // Do something...
+  }, 500),
+});
+```
+
 ## API
 
 Coming soon...
@@ -137,10 +151,6 @@ import ResizeObserver from "resize-observer-polyfill";
 
 if (!window.ResizeObserver) window.ResizeObserver = ResizeObserver;
 ```
-
-## Performance Issues
-
-Coming soon...
 
 ## Contributors ✨
 
