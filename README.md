@@ -50,7 +50,7 @@ $ npm install --save react-cool-dimensions
 
 ### Basic Use Case
 
-To report the size of an element by the `width` and `height` states.
+To report the size of an element by the `width` and `height` states. Please note, it reports the [content rectangle](https://developers.google.com/web/updates/2016/10/resizeobserver) of the element.
 
 ```js
 import React, { useRef } from "react";
@@ -108,7 +108,7 @@ const App = () => {
 
 ## Performance Optimization
 
-The `onResize` event will be triggered when the target element is being resized. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own throttled/debounced function as below.
+The `onResize` event will be triggered whenever the size of the target element is being changed. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own throttled/debounced function as below.
 
 ```js
 import _ from "lodash";
