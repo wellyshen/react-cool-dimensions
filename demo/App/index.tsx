@@ -6,10 +6,11 @@ import GitHubCorner from "../GitHubCorner";
 import useDimensions from "../../src";
 import { root, container, title, subtitle, frame, controller } from "./styles";
 
-const sz = 300;
-
 const App: FC<{}> = () => {
-  const [size, setSize] = useState<{ w: number; h: number }>({ w: sz, h: sz });
+  const [size, setSize] = useState<{ w: number; h: number }>({
+    w: 300,
+    h: 300,
+  });
   const ref = useRef<HTMLDivElement>();
   const {
     currentBreakpoint,
@@ -87,11 +88,7 @@ const App: FC<{}> = () => {
         </p>
         <div
           css={frame}
-          style={{
-            left: `${window.innerWidth / 2 - sz / 2}px`,
-            width: `${size.w}px`,
-            height: `${size.h}px`,
-          }}
+          style={{ width: `${size.w}px`, height: `${size.h}px` }}
           ref={ref}
         >
           {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}

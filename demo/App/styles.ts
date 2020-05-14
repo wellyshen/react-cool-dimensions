@@ -11,7 +11,9 @@ export const root = css`
 `;
 
 export const container = css`
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 5rem 5%;
   ${sm} {
     padding-left: 10%;
@@ -36,7 +38,7 @@ export const subtitle = css`
 `;
 
 export const frame = css`
-  position: absolute;
+  position: relative;
   border: 1px solid #777;
 `;
 
