@@ -21,12 +21,16 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 - [x] Support event callback by breakpoints, like [container queries](https://wicg.github.io/cq-usecases)
 - [x] Support polyfill
 - [x] TypeScript type definition
-- [ ] Server-side compatibility
+- [x] Server-side compatibility
 - [ ] Unit testing
 - [ ] Demo app
 - [ ] Demo code
 - [ ] Documentation
-- [ ] CI/CD
+- [x] CI/CD
+
+## Features
+
+Coming soon...
 
 ## Requirement
 
