@@ -1,4 +1,4 @@
-🚧 This project is in-progress. API may be changed frequently, I don't recommend to use it now. If you're willing to be the early user, please note any changes by following the [release](https://github.com/wellyshen/react-cool-dimensions/releases). Here's the [milestone](#milestone).
+> 🚧 This project is in-progress. API may be changed frequently, I don't recommend to use it now. If you're willing to be the early user, please note any changes by following the [release](https://github.com/wellyshen/react-cool-dimensions/releases). Here's the [milestone](#milestone).
 
 # React Cool Dimensions
 
