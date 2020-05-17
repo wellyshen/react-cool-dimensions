@@ -4,40 +4,42 @@ import normalize from "normalize.css";
 
 import GitHubCorner from "../GitHubCorner";
 import useDimensions from "../../src";
-import { root, container, title, subtitle, frame, controller } from "./styles";
+import {
+  root,
+  container,
+  title,
+  subtitle,
+  sizeInfo,
+  frame,
+  card,
+  cardMD,
+  cardLG,
+  image,
+  text,
+  controller,
+} from "./styles";
+
+const defaultW = 230;
+const defaultH = 330;
 
 const App: FC<{}> = () => {
   const [size, setSize] = useState<{ w: number; h: number }>({
-    w: 300,
-    h: 300,
+    w: defaultW,
+    h: defaultH,
   });
   const ref = useRef<HTMLDivElement>();
-  const {
-    currentBreakpoint,
-    width,
-    height,
-    entry,
-    observe,
-    unobserve,
-  } = useDimensions(ref, {
-    breakpoints: { T1: 300, T2: 100, T3: 200, T4: 400 },
-    onResize: ({
-      currentBreakpoint: curBp,
-      width: w,
-      height: h,
-      entry: en,
-      observe: ob,
-      unobserve: unob,
-    }) => {
-      console.log("LOG ===> onResize: ", curBp, w, h, en);
-    },
+  const { currentBreakpoint, width, height } = useDimensions(ref, {
+    breakpoints: { SM: 100, MD: 300, LG: 500 },
   });
-
-  // console.log("LOG ===> ", currentBreakpoint, width, height, entry);
 
   const resize = (x: number, y: number): void => {
     const { left: offsetX, top: offsetY } = ref.current.getBoundingClientRect();
-    setSize({ w: x - offsetX, h: y - offsetY });
+    let w = x - offsetX;
+    let h = y - offsetY;
+    if (w < defaultW) w = defaultW;
+    if (h < defaultH) h = defaultH;
+
+    setSize({ w, h });
   };
 
   const handleMouseMove = (e: MouseEvent): void => {
@@ -86,11 +88,37 @@ const App: FC<{}> = () => {
           React hook to measure an element&apos;s size and handle responsive
           components.
         </p>
+        <div css={sizeInfo}>
+          {Math.round(width)} x {Math.round(height)} · {currentBreakpoint}
+        </div>
         <div
           css={frame}
           style={{ width: `${size.w}px`, height: `${size.h}px` }}
           ref={ref}
         >
+          <div
+            css={[
+              card,
+              currentBreakpoint !== "SM" && cardMD,
+              currentBreakpoint === "LG" && cardLG,
+            ]}
+          >
+            <div css={image}>
+              <img
+                src="https://raw.githubusercontent.com/wellyshen/react-cool-dimensions/master/demo/static/site_assets/og_image.png"
+                alt="react-cool-dimensions"
+              />
+            </div>
+            <div css={text}>
+              <div>
+                A React hook that measure an element&apos;s size and handle
+                responsive components with highly-performant way, using
+                ResizeObserver.
+              </div>
+              {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
+              <div>😎 🤩 🥳 🤪 🤓</div>
+            </div>
+          </div>
           {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
           <div
             css={controller}
