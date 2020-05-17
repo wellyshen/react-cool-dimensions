@@ -23,7 +23,7 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 - [x] TypeScript type definition
 - [x] Server-side compatibility
 - [ ] Unit testing
-- [x] Demo app
+- [ ] Demo app
 - [ ] Demo code
 - [ ] Documentation
 - [x] CI/CD
@@ -54,7 +54,7 @@ $ npm install --save react-cool-dimensions
 
 ### Basic Use Case
 
-To report the size of an element by the `width` and `height` states. Please note, it reports the [content rectangle](https://developers.google.com/web/updates/2016/10/resizeobserver) of the element.
+To report the size of an element by the `width` and `height` states. Please note, it reports the [content rectangle](https://developers.google.com/web/updates/2016/10/resizeobserver#what_is_being_reported) of the element.
 
 ```js
 import React, { useRef } from "react";
@@ -64,7 +64,7 @@ const App = () => {
   const ref = useRef();
   const { width, height, entry, unobserve, observe } = useDimensions(ref, {
     onResize: ({ width, height, entry, unobserve, observe }) => {
-      // Triggered when the size of the target has been changed
+      // Triggered whenever the size of the target is changed
     },
   });
 
@@ -93,7 +93,7 @@ const App = () => {
     // for instance, 0px - 319px (currentBreakpoint = xs), 320px - 479px (currentBreakpoint = sm) and so on
     breakpoints: { xs: 0, sm: 320, md: 480, lg: 640 },
     onResize: ({ currentBreakpoint }) => {
-      // Now the event callback will only be triggered once for each breakpoint
+      // Now the event callback will be triggered when breakpoint is changed
       // we can also access the "currentBreakpoint" here
     },
   });
@@ -112,7 +112,7 @@ const App = () => {
 
 ## Performance Optimization
 
-The `onResize` event will be triggered whenever the size of the target element is being changed. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own throttled/debounced function as below.
+The `onResize` event will be triggered whenever the size of the target element is changed. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own throttled/debounced function as below.
 
 ```js
 import _ from "lodash";
@@ -132,11 +132,26 @@ const returnObj = useDimensions(ref: RefObject<HTMLElement>, options?: object);
 
 ### Return object
 
-Coming soon...
+It's returned with the following properties.
+
+| Key                 | Type     | Default | Description                                                                                                                                                                          |
+| ------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `width`             | number   |         | The width of the target element in pixel, based on the [content rectangle](https://developers.google.com/web/updates/2016/10/resizeobserver#what_is_being_reported) of the element.  |
+| `height`            | number   |         | The height of the target element in pixel, based on the [content rectangle](https://developers.google.com/web/updates/2016/10/resizeobserver#what_is_being_reported) of the element. |
+| `currentBreakpoint` | string   |         | Indicates the current breakpoint of the [responsive components](#responsive-components).                                                                                             |
+| `entry`             | object   |         | The [ResizeObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry) of the target element.                                                               |
+| `unobserve`         | function |         | To stop observing the target element.                                                                                                                                                |
+| `observe`           | function |         | To re-start observing the target element once it's stopped observing.                                                                                                                |
 
 ### Parameters
 
-Coming soon...
+You must pass the `ref` to use this hook. The options provides the following configurations and event callback for you.
+
+| Key           | Type           | Default | Description                                                                                                                                                                                   |
+| ------------- | -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `breakpoints` | object         |         | Activates the responsive mode for [responsive components](#responsive-components) or [performance optimization](#performance-optimization).                                                   |
+| `onResize`    | function       |         | It's invoked whenever the size of the target element is changed. But in [responsive mode](#responsive-components), it's invoked based on the changing of the breakpoint rather than the size. |
+| `polyfill`    | ResizeObserver |         | It's used for [injecting a polyfill](#resizeobserver-polyfill).                                                                                                                               |
 
 ## ResizeObserver Polyfill
 
