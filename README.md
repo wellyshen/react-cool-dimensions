@@ -23,7 +23,7 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 - [x] TypeScript type definition
 - [x] Server-side compatibility
 - [ ] Unit testing
-- [ ] Demo app
+- [x] Demo app
 - [ ] Demo code
 - [ ] Documentation
 - [x] CI/CD
@@ -108,7 +108,7 @@ const App = () => {
 };
 ```
 
-> Note: If the `breakpoints` option isn't set or there's on the defined breakpoint (object key) for a range of width. The `currentBreakpoint` will be `undefined`.
+> Note: If the `breakpoints` option isn't set or there's on the defined breakpoint (object key) for a range of width. The `currentBreakpoint` will be empty string;
 
 ## Performance Optimization
 
@@ -125,6 +125,16 @@ const { width, height } = useDimensions(ref, {
 ```
 
 ## API
+
+```js
+const returnObj = useDimensions(ref: RefObject<HTMLElement>, options?: object);
+```
+
+### Return object
+
+Coming soon...
+
+### Parameters
 
 Coming soon...
 
