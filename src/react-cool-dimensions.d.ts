@@ -35,7 +35,7 @@ declare module "react-cool-dimensions" {
   }
 
   interface Return {
-    readonly currentBreakpoint?: string;
+    readonly currentBreakpoint: string;
     readonly width: number;
     readonly height: number;
     readonly entry?: ResizeObserverEntry;

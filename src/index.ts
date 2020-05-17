@@ -23,7 +23,7 @@ interface Options {
   polyfill?: any;
 }
 interface Return {
-  readonly currentBreakpoint?: string;
+  readonly currentBreakpoint: string;
   readonly width: number;
   readonly height: number;
   readonly entry?: ResizeObserverEntry;
@@ -31,15 +31,15 @@ interface Return {
   readonly unobserve: () => void;
 }
 interface State {
-  currentBreakpoint?: string;
+  currentBreakpoint: string;
   width: number;
   height: number;
   entry?: ResizeObserverEntry;
 }
 
 const getCurrentBreakpoint = (bps: Breakpoints, w: number): string => {
-  let curBp;
-  let max = 0;
+  let curBp = "";
+  let max = -1;
 
   Object.keys(bps).forEach((key: string) => {
     const val = bps[key];
@@ -57,7 +57,11 @@ const useDimensions = (
   ref: RefObject<HTMLElement>,
   { breakpoints, onResize, polyfill }: Options = {}
 ): Return => {
-  const [state, setState] = useState<State>({ width: 0, height: 0 });
+  const [state, setState] = useState<State>({
+    currentBreakpoint: "",
+    width: 0,
+    height: 0,
+  });
   const prevSizeRef = useRef<{ width?: number; height?: number }>({});
   const prevBreakpointRef = useRef<string>();
   const isObservingRef = useRef<boolean>(false);
@@ -116,19 +120,19 @@ const useDimensions = (
         prevSizeRef.current = { width, height };
 
         const e = { width, height, entry, observe, unobserve };
-        let currentBreakpoint;
+        let currentBreakpoint = "";
 
-        if (onResizeRef.current) {
-          if (breakpoints) {
-            currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
+        if (breakpoints) {
+          currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
 
-            if (currentBreakpoint === prevBreakpointRef.current) return;
+          if (currentBreakpoint !== prevBreakpointRef.current) {
+            if (onResizeRef.current)
+              onResizeRef.current({ ...e, currentBreakpoint });
 
-            onResizeRef.current({ ...e, currentBreakpoint });
             prevBreakpointRef.current = currentBreakpoint;
-          } else {
-            onResizeRef.current(e);
           }
+        } else if (onResizeRef.current) {
+          onResizeRef.current(e);
         }
 
         setState({ currentBreakpoint, width, height, entry });
