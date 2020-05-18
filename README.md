@@ -1,8 +1,8 @@
-> 🚧 This project is in-progress. API may be changed frequently, I don't recommend to use it now. If you're willing to be the early user, please note any changes by following the [release](https://github.com/wellyshen/react-cool-dimensions/releases). Here's the [milestone](#milestone).
-
 # React Cool Dimensions
 
 A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) that measure an element's size and handle [responsive components](#responsive-components) with highly-performant way, using [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver). Try it you will 👍🏻 it!
+
+❤️ it? ⭐️ it on [GitHub](https://github.com/wellyshen/react-cool-dimensions/stargazers) or [Tweet](https://twitter.com/intent/tweet?text=With%20@react-cool-dimensions,%20I%20can%20build%20a%20performant%20web%20app.%20Thanks,%20@Welly%20Shen%20🤩) about it.
 
 [![build status](https://img.shields.io/travis/wellyshen/react-cool-dimensions/master?style=flat-square)](https://travis-ci.org/wellyshen/react-cool-dimensions)
 [![coverage status](https://img.shields.io/coveralls/github/wellyshen/react-cool-dimensions?style=flat-square)](https://coveralls.io/github/wellyshen/react-cool-dimensions?branch=master)
@@ -15,22 +15,15 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](https://github.com/wellyshen/react-cool-dimensions/blob/master/CONTRIBUTING.md)
 [![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fwellyshen%2Freact-cool-dimensions)](https://twitter.com/intent/tweet?text=With%20@react-cool-dimensions,%20I%20can%20build%20a%20performant%20web%20app.%20Thanks,%20@Welly%20Shen%20🤩)
 
-## Milestone
-
-- [x] Support and monitor element's size
-- [x] Support event callback by breakpoints, like [container queries](https://wicg.github.io/cq-usecases)
-- [x] Support polyfill
-- [x] TypeScript type definition
-- [x] Server-side compatibility
-- [ ] Unit testing
-- [ ] Demo app
-- [ ] Demo code
-- [ ] Documentation
-- [x] CI/CD
-
 ## Features
 
-Coming soon...
+- 🚀 Measures element's size with highly-performant way, using [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver).
+- 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
+- 🔮 Easy to handle [responsive components](#responsive-components), provides an alternative solution to the [container queries](https://wicg.github.io/container-queries) problem.
+- 🎛 Super flexible [API](#api) design to cover most cases for you.
+- 📜 Supports [TypeScript](https://www.typescriptlang.org) type definition.
+- 🗄️ Server-side rendering compatibility.
+- 🦠 Tiny size ([~ 1.5KB gzipped](https://bundlephobia.com/result?p=react-cool-dimensions)). No external dependencies, aside for the `react`.
 
 ## Requirement
 
@@ -180,6 +173,10 @@ import ResizeObserver from "resize-observer-polyfill";
 
 if (!window.ResizeObserver) window.ResizeObserver = ResizeObserver;
 ```
+
+## To Do
+
+- [ ] Unit testing
 
 ## Contributors ✨
 
