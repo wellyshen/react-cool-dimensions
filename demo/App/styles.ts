@@ -38,13 +38,14 @@ export const subtitle = css`
   margin: 0 0 2.5rem;
 `;
 
-export const sizeInfo = css`
-  margin-bottom: 0.5rem;
-  color: #777;
-`;
-
 export const banner = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 8rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
   background: #aaa;
 `;
 

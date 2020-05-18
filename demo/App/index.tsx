@@ -9,7 +9,6 @@ import {
   container,
   title,
   subtitle,
-  sizeInfo,
   page,
   pageMD,
   pageLG,
@@ -100,9 +99,6 @@ const App: FC<{}> = () => {
           React hook to measure an element&apos;s size and handle responsive
           components.
         </p>
-        <div css={sizeInfo}>
-          {Math.round(width)} x {Math.round(height)} · {currentBreakpoint}
-        </div>
         <div
           css={[
             page,
@@ -113,7 +109,9 @@ const App: FC<{}> = () => {
           ref={ref}
         >
           <div css={content}>
-            <div css={banner} />
+            <div css={banner}>
+              {Math.round(width)} x {Math.round(height)} · {currentBreakpoint}
+            </div>
             <div css={cardWrapper}>{renderCards(3)}</div>
           </div>
           {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
