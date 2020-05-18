@@ -10,36 +10,29 @@ import {
   title,
   subtitle,
   sizeInfo,
-  frame,
+  page,
+  pageMD,
+  pageLG,
+  content,
+  banner,
+  cardWrapper,
   card,
-  cardMD,
-  cardLG,
-  image,
-  text,
   controller,
 } from "./styles";
 
-const defaultW = 230;
-const defaultH = 330;
-
 const App: FC<{}> = () => {
   const [size, setSize] = useState<{ w: number; h: number }>({
-    w: defaultW,
-    h: defaultH,
+    w: 250,
+    h: 300,
   });
   const ref = useRef<HTMLDivElement>();
   const { currentBreakpoint, width, height } = useDimensions(ref, {
-    breakpoints: { SM: 100, MD: 300, LG: 500 },
+    breakpoints: { SM: 0, MD: 300, LG: 600 },
   });
 
   const resize = (x: number, y: number): void => {
     const { left: offsetX, top: offsetY } = ref.current.getBoundingClientRect();
-    let w = x - offsetX;
-    let h = y - offsetY;
-    if (w < defaultW) w = defaultW;
-    if (h < defaultH) h = defaultH;
-
-    setSize({ w, h });
+    setSize({ w: x - offsetX, h: y - offsetY });
   };
 
   const handleMouseMove = (e: MouseEvent): void => {
@@ -73,6 +66,25 @@ const App: FC<{}> = () => {
     }
   };
 
+  const renderCards = (num: number): JSX.Element[] => {
+    const cards = [];
+
+    while (cards.length < num) {
+      cards.push(
+        <div key={cards.length} css={card}>
+          <div />
+          <div>
+            <div />
+            <div />
+            <div />
+          </div>
+        </div>
+      );
+    }
+
+    return cards;
+  };
+
   return (
     <>
       <Global
@@ -92,32 +104,17 @@ const App: FC<{}> = () => {
           {Math.round(width)} x {Math.round(height)} · {currentBreakpoint}
         </div>
         <div
-          css={frame}
+          css={[
+            page,
+            currentBreakpoint !== "SM" && pageMD,
+            currentBreakpoint === "LG" && pageLG,
+          ]}
           style={{ width: `${size.w}px`, height: `${size.h}px` }}
           ref={ref}
         >
-          <div
-            css={[
-              card,
-              currentBreakpoint !== "SM" && cardMD,
-              currentBreakpoint === "LG" && cardLG,
-            ]}
-          >
-            <div css={image}>
-              <img
-                src="https://raw.githubusercontent.com/wellyshen/react-cool-dimensions/master/demo/static/site_assets/og_image.png"
-                alt="react-cool-dimensions"
-              />
-            </div>
-            <div css={text}>
-              <div>
-                A React hook that measure an element&apos;s size and handle
-                responsive components with highly-performant way, using
-                ResizeObserver.
-              </div>
-              {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
-              <div>😎 🤩 🥳 🤪 🤓</div>
-            </div>
+          <div css={content}>
+            <div css={banner} />
+            <div css={cardWrapper}>{renderCards(3)}</div>
           </div>
           {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
           <div

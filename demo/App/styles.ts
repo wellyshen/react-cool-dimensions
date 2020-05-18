@@ -43,47 +43,70 @@ export const sizeInfo = css`
   color: #777;
 `;
 
-export const frame = css`
+export const banner = css`
+  height: 8rem;
+  background: #aaa;
+`;
+
+export const cardWrapper = css`
+  padding: 1rem;
+`;
+
+export const card = css`
+  &:not(:last-of-type) {
+    margin-bottom: 1rem;
+  }
+  > div:first-of-type {
+    margin-bottom: 0.5rem;
+    height: 4rem;
+    background: #ccc;
+  }
+  > div:last-of-type div {
+    margin-bottom: 0.3rem;
+    height: 0.5rem;
+    background: #eee;
+    &:last-of-type {
+      width: 70%;
+    }
+  }
+`;
+
+export const page = css`
   position: relative;
   border: 1px solid #777;
 `;
 
-export const image = css`
-  img {
-    width: 100%;
+export const pageMD = css`
+  .css-${card.name} {
+    display: flex;
+    > div:first-of-type {
+      flex: 1;
+      margin: 0 0.5rem 0 0;
+    }
+    > div:last-of-type {
+      flex: 1;
+    }
   }
 `;
 
-export const text = css`
-  margin-top: 1rem;
-  div:last-child {
-    margin-top: 1rem;
-    font-size: 1.25rem;
+export const pageLG = css`
+  .css-${banner.name} {
+    margin: 1rem 1rem 0;
+  }
+  .css-${cardWrapper.name} {
+    display: flex;
+  }
+  .css-${card.name} {
+    flex: 1;
+    &:not(:last-of-type) {
+      margin-right: 0.5rem;
+    }
   }
 `;
 
-export const card = css`
-  margin: 1rem;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-`;
-
-export const cardMD = css`
-  display: flex;
-  .css-${text.name} {
-    margin-top: 0;
-    padding-left: 1rem;
-  }
-`;
-
-export const cardLG = css`
-  display: flex;
-  .css-${image.name} {
-    flex: 4;
-  }
-  .css-${text.name} {
-    flex: 6;
-  }
+export const content = css`
+  height: 100%;
+  overflow-y: scroll;
 `;
 
 export const controller = css`
