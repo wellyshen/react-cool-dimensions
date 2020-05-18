@@ -26,7 +26,7 @@ const App: FC<{}> = () => {
   });
   const ref = useRef<HTMLDivElement>();
   const { currentBreakpoint, width, height } = useDimensions(ref, {
-    breakpoints: { SM: 0, MD: 300, LG: 600 },
+    breakpoints: { SM: 0, MD: 350, LG: 600 },
   });
 
   const resize = (x: number, y: number): void => {
