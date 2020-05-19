@@ -125,28 +125,50 @@ describe("useDimensions", () => {
     expect(result.current.entry).toStrictEqual(e);
   });
 
-  it("should trigger onResize", () => {
+  it("should trigger onResize without breakpoints", () => {
     const onResize = jest.fn((e) => {
-      // e.unobserve();
-      // e.observe();
+      e.unobserve();
+      e.observe();
     });
     renderHelper({ onResize });
-    const defaultEvent = {
-      currentBreakpoint: "",
-      observe: expect.any(Function),
-      unobserve: expect.any(Function),
-    };
     const contentRect = { width: 100, height: 100 };
     act(() => {
       triggerObserverCb({ contentRect });
-      // triggerObserverCb({ isIntersecting, boundingClientRect });
     });
     expect(onResize).toHaveBeenCalledWith({
-      ...defaultEvent,
+      currentBreakpoint: "",
       width: contentRect.width,
       height: contentRect.height,
       entry: { contentRect },
+      observe: expect.any(Function),
+      unobserve: expect.any(Function),
     });
+    expect(disconnect).toHaveBeenCalledTimes(9);
+    expect(observe).toHaveBeenCalledTimes(10);
+  });
+
+  it("should trigger onResize with breakpoints", () => {
+    const onResize = jest.fn((e) => {
+      e.unobserve();
+      e.observe();
+    });
+    renderHelper({ breakpoints: { T0: 0, T1: 100 }, onResize });
+    const contentRect = { width: 50, height: 100 };
+    act(() => {
+      triggerObserverCb({ contentRect });
+      triggerObserverCb({ contentRect });
+    });
+    expect(onResize).toHaveBeenCalledTimes(1);
+    expect(onResize).toHaveBeenCalledWith({
+      currentBreakpoint: "T0",
+      width: contentRect.width,
+      height: contentRect.height,
+      entry: { contentRect },
+      observe: expect.any(Function),
+      unobserve: expect.any(Function),
+    });
+    expect(disconnect).toHaveBeenCalledTimes(11);
+    expect(observe).toHaveBeenCalledTimes(12);
   });
 
   it("should throw resize observer error", () => {
@@ -179,6 +201,6 @@ describe("useDimensions", () => {
     // @ts-ignore
     delete global.ResizeObserverEntry;
     renderHelper({ polyfill: mockResizeObserver });
-    expect(observe).toHaveBeenCalledTimes(12);
+    expect(observe).toHaveBeenCalledTimes(15);
   });
 });
