@@ -17,12 +17,12 @@ interface OnResize {
   (event?: Event): void;
 }
 type Breakpoints = { [key: string]: number };
-interface Options {
+export interface Options {
   breakpoints?: Breakpoints;
   onResize?: OnResize;
   polyfill?: any;
 }
-interface Return {
+export interface Return {
   readonly currentBreakpoint: string;
   readonly width: number;
   readonly height: number;
