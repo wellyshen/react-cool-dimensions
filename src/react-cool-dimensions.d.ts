@@ -16,16 +16,16 @@ declare module "react-cool-dimensions" {
 
   // Hook types
   export interface Event {
-    currentBreakpoint?: string;
-    width?: number;
-    height?: number;
-    entry?: ResizeObserverEntry;
-    observe?: () => void;
-    unobserve?: () => void;
+    currentBreakpoint: string;
+    width: number;
+    height: number;
+    entry: ResizeObserverEntry;
+    observe: () => void;
+    unobserve: () => void;
   }
 
   export interface OnResize {
-    (event?: Event): void;
+    (event: Event): void;
   }
 
   interface Options {
