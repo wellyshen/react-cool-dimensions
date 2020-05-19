@@ -28,7 +28,7 @@ describe("useDimensions", () => {
 
   interface Event {
     contentBoxSize?: { blockSize: number; inlineSize: number };
-    contentRect?: { width: number; height: number };
+    contentRect?: { width: number; height?: number };
   }
 
   const triggerObserverCb = (e: Event): void => {
@@ -81,10 +81,72 @@ describe("useDimensions", () => {
   });
 
   it("should return currentBreakpoint correctly", () => {
-    const result = renderHelper();
+    let result = renderHelper();
     expect(result.current.currentBreakpoint).toBe("");
 
-    // ...
+    result = renderHelper({ breakpoints: { T1: 100 } });
+    act(() => {
+      triggerObserverCb({ contentRect: { width: 0 } });
+    });
+    expect(result.current.currentBreakpoint).toBe("");
+    act(() => {
+      triggerObserverCb({ contentRect: { width: 99 } });
+    });
+    expect(result.current.currentBreakpoint).toBe("");
+
+    result = renderHelper({ breakpoints: { T0: 0, T1: 100 } });
+    act(() => {
+      triggerObserverCb({ contentRect: { width: 0 } });
+    });
+    expect(result.current.currentBreakpoint).toBe("T0");
+    act(() => {
+      triggerObserverCb({ contentRect: { width: 99 } });
+    });
+    expect(result.current.currentBreakpoint).toBe("T0");
+
+    act(() => {
+      triggerObserverCb({ contentRect: { width: 100 } });
+    });
+    expect(result.current.currentBreakpoint).toBe("T1");
+    act(() => {
+      triggerObserverCb({ contentRect: { width: 199 } });
+    });
+    expect(result.current.currentBreakpoint).toBe("T1");
+  });
+
+  it("should return entry correctly", () => {
+    const result = renderHelper();
+    expect(result.current.entry).toBeUndefined();
+
+    const e = { contentRect: { width: 100, height: 100 } };
+    act(() => {
+      triggerObserverCb(e);
+    });
+    expect(result.current.entry).toStrictEqual(e);
+  });
+
+  it("should trigger onResize", () => {
+    const onResize = jest.fn((e) => {
+      // e.unobserve();
+      // e.observe();
+    });
+    renderHelper({ onResize });
+    const defaultEvent = {
+      currentBreakpoint: "",
+      observe: expect.any(Function),
+      unobserve: expect.any(Function),
+    };
+    const contentRect = { width: 100, height: 100 };
+    act(() => {
+      triggerObserverCb({ contentRect });
+      // triggerObserverCb({ isIntersecting, boundingClientRect });
+    });
+    expect(onResize).toHaveBeenCalledWith({
+      ...defaultEvent,
+      width: contentRect.width,
+      height: contentRect.height,
+      entry: { contentRect },
+    });
   });
 
   it("should throw resize observer error", () => {
@@ -95,6 +157,9 @@ describe("useDimensions", () => {
 
     // @ts-ignore
     delete global.ResizeObserver;
+    renderHelper({ polyfill: mockResizeObserver });
+    expect(console.error).not.toHaveBeenCalled();
+
     renderHelper();
     expect(console.error).toHaveBeenCalledTimes(1);
     expect(console.error).toHaveBeenCalledWith(observerErr);
@@ -106,5 +171,14 @@ describe("useDimensions", () => {
     renderHelper();
     expect(console.error).toHaveBeenCalledTimes(2);
     expect(console.error).toHaveBeenCalledWith(observerErr);
+  });
+
+  it("should use polyfill", () => {
+    // @ts-ignore
+    delete global.ResizeObserver;
+    // @ts-ignore
+    delete global.ResizeObserverEntry;
+    renderHelper({ polyfill: mockResizeObserver });
+    expect(observe).toHaveBeenCalledTimes(12);
   });
 });
