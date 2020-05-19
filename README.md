@@ -178,10 +178,6 @@ import ResizeObserver from "resize-observer-polyfill";
 if (!window.ResizeObserver) window.ResizeObserver = ResizeObserver;
 ```
 
-## To Do
-
-- [ ] Unit testing
-
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
