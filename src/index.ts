@@ -5,16 +5,19 @@ import { RefObject, useState, useRef, useEffect, useCallback } from "react";
 export const observerErr =
   "💡react-cool-dimensions: the browser doesn't support Resize Observer, please use polyfill: https://github.com/wellyshen/react-cool-dimensions#resizeobserver-polyfill";
 
-interface Event {
-  currentBreakpoint?: string;
-  width?: number;
-  height?: number;
+interface State {
+  currentBreakpoint: string;
+  width: number;
+  height: number;
   entry?: ResizeObserverEntry;
-  observe?: () => void;
-  unobserve?: () => void;
+}
+interface Event extends State {
+  entry: ResizeObserverEntry;
+  observe: () => void;
+  unobserve: () => void;
 }
 interface OnResize {
-  (event?: Event): void;
+  (event: Event): void;
 }
 type Breakpoints = { [key: string]: number };
 export interface Options {
@@ -29,12 +32,6 @@ export interface Return {
   readonly entry?: ResizeObserverEntry;
   readonly observe: () => void;
   readonly unobserve: () => void;
-}
-interface State {
-  currentBreakpoint: string;
-  width: number;
-  height: number;
-  entry?: ResizeObserverEntry;
 }
 
 const getCurrentBreakpoint = (bps: Breakpoints, w: number): string => {
@@ -97,7 +94,7 @@ const useDimensions = (
       return (): void => null;
     }
 
-    observerRef.current = new (ResizeObserver || polyfill)(
+    observerRef.current = new (window.ResizeObserver || polyfill)(
       ([entry]: ResizeObserverEntry[]) => {
         const { contentBoxSize, contentRect } = entry;
         // @juggle/resize-observer polyfill has different data structure
@@ -119,23 +116,30 @@ const useDimensions = (
 
         prevSizeRef.current = { width, height };
 
-        const e = { width, height, entry, observe, unobserve };
-        let currentBreakpoint = "";
+        const e = {
+          currentBreakpoint: "",
+          width,
+          height,
+          entry,
+          observe,
+          unobserve,
+        };
 
         if (breakpoints) {
-          currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
+          e.currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
 
-          if (currentBreakpoint !== prevBreakpointRef.current) {
-            if (onResizeRef.current)
-              onResizeRef.current({ ...e, currentBreakpoint });
-
-            prevBreakpointRef.current = currentBreakpoint;
-          }
-        } else if (onResizeRef.current) {
-          onResizeRef.current(e);
+          if (e.currentBreakpoint !== prevBreakpointRef.current)
+            prevBreakpointRef.current = e.currentBreakpoint;
         }
 
-        setState({ currentBreakpoint, width, height, entry });
+        if (onResizeRef.current) onResizeRef.current(e);
+
+        setState({
+          currentBreakpoint: e.currentBreakpoint,
+          width,
+          height,
+          entry,
+        });
       }
     );
 
