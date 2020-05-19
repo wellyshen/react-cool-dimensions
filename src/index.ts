@@ -128,11 +128,13 @@ const useDimensions = (
         if (breakpoints) {
           e.currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
 
-          if (e.currentBreakpoint !== prevBreakpointRef.current)
+          if (e.currentBreakpoint !== prevBreakpointRef.current) {
+            if (onResizeRef.current) onResizeRef.current(e);
             prevBreakpointRef.current = e.currentBreakpoint;
+          }
+        } else if (onResizeRef.current) {
+          onResizeRef.current(e);
         }
-
-        if (onResizeRef.current) onResizeRef.current(e);
 
         setState({
           currentBreakpoint: e.currentBreakpoint,
