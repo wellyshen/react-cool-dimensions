@@ -83,12 +83,12 @@ No worries, `react-cool-dimensions` provides an alternative solution for us! We 
 import React, { useRef } from "react";
 import useDimensions from "react-cool-dimensions";
 
-const App = () => {
+const Card = () => {
   const ref = useRef();
   const { currentBreakpoint } = useDimensions(ref, {
     // The "currentBreakpoint" will be the object key based on the target's width
-    // for instance, 0px - 319px (currentBreakpoint = xs), 320px - 479px (currentBreakpoint = sm) and so on
-    breakpoints: { xs: 0, sm: 320, md: 480, lg: 640 },
+    // for instance, 0px - 319px (currentBreakpoint = XS), 320px - 479px (currentBreakpoint = SM) and so on
+    breakpoints: { XS: 0, SM: 320, MD: 480, LG: 640 },
     onResize: ({ currentBreakpoint }) => {
       // Now the event callback will be triggered when breakpoint is changed
       // we can also access the "currentBreakpoint" here
