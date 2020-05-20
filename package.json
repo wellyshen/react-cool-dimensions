@@ -134,6 +134,13 @@
       "!src/*.d.ts"
     ]
   },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": false,
+    "bracketSpacing": true,
+    "trailingComma": "es5"
+  },
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
