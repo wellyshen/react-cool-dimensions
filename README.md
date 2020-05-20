@@ -105,7 +105,7 @@ const App = () => {
 };
 ```
 
-> Note: If the `breakpoints` option isn't set or there's on the defined breakpoint (object key) for a range of width. The `currentBreakpoint` will be empty string;
+> Note: If the `breakpoints` option isn't set or there's no the defined breakpoint (object key) for a range of width. The `currentBreakpoint` will be empty string;
 
 ## Performance Optimization
 
