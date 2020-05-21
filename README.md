@@ -45,7 +45,7 @@ $ npm install --save react-cool-dimensions
 
 ## Usage
 
-`react-cool-dimensions` has a flexible [API](#api) design, it can cover simple to complex use cases for you. Here are some example to show you how does it work.
+`react-cool-dimensions` has a flexible [API](#api) design, it can cover simple to complex use cases for you. Here are some examples to show you how does it work.
 
 > ⚠️ [Most modern browsers support ResizeObserver natively](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver). You can also use [polyfill](#resizeobserver-polyfill) for full browser support.
 
