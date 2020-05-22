@@ -24,10 +24,11 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 - 🚀 Measures element's size with highly-performant way, using [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver).
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
 - 🍰 Easy to handle [responsive components](#responsive-components), provides an alternative solution to the [container queries](https://wicg.github.io/container-queries) problem.
+- 📦 Supports [border-box size measurement](#border-box-size-measurement).
 - 🎛 Super flexible [API](#api) design to cover most cases for you.
 - 📜 Supports [TypeScript](https://www.typescriptlang.org) type definition.
 - 🗄️ Server-side rendering compatibility.
-- 🦠 Tiny size ([~ 1.5KB gzipped](https://bundlephobia.com/result?p=react-cool-dimensions)). No external dependencies, aside for the `react`.
+- 🦠 Tiny size ([~ 1.6KB gzipped](https://bundlephobia.com/result?p=react-cool-dimensions)). No external dependencies, aside for the `react`.
 
 ## Requirement
 
@@ -51,7 +52,7 @@ $ npm install --save react-cool-dimensions
 
 ### Basic Use Case
 
-To report the size of an element by the `width` and `height` states. Please note, it reports the [content rectangle](https://developers.google.com/web/updates/2016/10/resizeobserver#what_is_being_reported) of the element.
+To report the size of an element by the `width` and `height` states.
 
 ```js
 import React, { useRef } from "react";
@@ -107,6 +108,39 @@ const Card = () => {
 
 > Note: If the `breakpoints` option isn't set or there's no the defined breakpoint (object key) for a range of width. The `currentBreakpoint` will be empty string;
 
+## Border-box Size Measurement
+
+By default, the hook reports the `width` and `height` based on the [content rectangle](https://developers.google.com/web/updates/2016/10/resizeobserver#what_is_being_reported) of the target element. We can include the padding and border for measuring by the `useBorderBoxSize` option. Please note, the `width` and `height` states are rely on the [ResizeObserverEntry.borderBoxSize](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry/borderBoxSize) but [it hasn't widely implemented by browsers](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry/borderBoxSize#Browser_compatibility) therefore we need to use [polyfill](#resizeobserver-polyfill) when using this feature.
+
+```js
+import React, { useRef } from "react";
+import useDimensions from "react-cool-dimensions";
+import { ResizeObserver } from "@juggle/resize-observer";
+
+const App = () => {
+  const ref = useRef();
+  const { width, height } = useDimensions(ref, {
+    useBorderBoxSize: true, // Tell the hook to measure based on the border-box size, default is false
+    polyfill: ResizeObserver, // Use polyfill to make this feature works on more browsers
+  });
+
+  return (
+    <div
+      style={{
+        width: "100px",
+        height: "100px",
+        padding: "10px",
+        border: "5px solid #ccc",
+      }}
+      ref={ref}
+    >
+      {/* Now the width and height will be: 100px + 10px + 5px = 115px */}
+      Hi! My width is {width}px and height is {height}px
+    </div>
+  );
+};
+```
+
 ## Performance Optimization
 
 The `onResize` event will be triggered whenever the size of the target element is changed. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own throttled/debounced function as below.
@@ -131,41 +165,42 @@ const returnObj = useDimensions(ref: RefObject<HTMLElement>, options?: object);
 
 It's returned with the following properties.
 
-| Key                 | Type     | Default | Description                                                                                                                                                                          |
-| ------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `width`             | number   |         | The width of the target element in pixel, based on the [content rectangle](https://developers.google.com/web/updates/2016/10/resizeobserver#what_is_being_reported) of the element.  |
-| `height`            | number   |         | The height of the target element in pixel, based on the [content rectangle](https://developers.google.com/web/updates/2016/10/resizeobserver#what_is_being_reported) of the element. |
-| `currentBreakpoint` | string   |         | Indicates the current breakpoint of the [responsive components](#responsive-components).                                                                                             |
-| `entry`             | object   |         | The [ResizeObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry) of the target element.                                                               |
-| `unobserve`         | function |         | To stop observing the target element.                                                                                                                                                |
-| `observe`           | function |         | To re-start observing the target element once it's stopped observing.                                                                                                                |
+| Key                 | Type     | Default | Description                                                                                                            |
+| ------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `width`             | number   |         | The width of the target element in pixel.                                                                              |
+| `height`            | number   |         | The height of the target element in pixel.                                                                             |
+| `currentBreakpoint` | string   |         | Indicates the current breakpoint of the [responsive components](#responsive-components).                               |
+| `entry`             | object   |         | The [ResizeObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry) of the target element. |
+| `unobserve`         | function |         | To stop observing the target element.                                                                                  |
+| `observe`           | function |         | To re-start observing the target element once it's stopped observing.                                                  |
 
 ### Parameters
 
 You must pass the `ref` to use this hook. The options provides the following configurations and event callback for you.
 
-| Key           | Type           | Default | Description                                                                                                                                                                                   |
-| ------------- | -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `breakpoints` | object         |         | Activates the responsive mode for [responsive components](#responsive-components) or [performance optimization](#performance-optimization).                                                   |
-| `onResize`    | function       |         | It's invoked whenever the size of the target element is changed. But in [responsive mode](#responsive-components), it's invoked based on the changing of the breakpoint rather than the size. |
-| `polyfill`    | ResizeObserver |         | It's used for [injecting a polyfill](#resizeobserver-polyfill).                                                                                                                               |
+| Key                | Type           | Default | Description                                                                                                                                                                                   |
+| ------------------ | -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `breakpoints`      | object         |         | Activates the responsive mode for [responsive components](#responsive-components) or [performance optimization](#performance-optimization).                                                   |
+| `useBorderBoxSize` | boolean        | `false` | Tells the hook to [measure the target element based on the border-box size](#border-box-size-measurement).                                                                                    |
+| `onResize`         | function       |         | It's invoked whenever the size of the target element is changed. But in [responsive mode](#responsive-components), it's invoked based on the changing of the breakpoint rather than the size. |
+| `polyfill`         | ResizeObserver |         | It's used for [injecting a polyfill](#resizeobserver-polyfill).                                                                                                                               |
 
 ## ResizeObserver Polyfill
 
 [ResizeObserver has good support amongst browsers](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver), but it's not universal. You'll need to use polyfill for browsers that don't support it. Polyfills is something you should do consciously at the application level. Therefore `react-cool-dimensions` doesn't include it.
 
-We recommend using [resize-observer-polyfill](https://github.com/que-etc/resize-observer-polyfill):
+We recommend using [@juggle/resize-observer](https://github.com/juggle/resize-observer):
 
 ```sh
-$ yarn add resize-observer-polyfill
+$ yarn add @juggle/resize-observer
 # or
-$ npm install --save resize-observer-polyfill
+$ npm install --save @juggle/resize-observer
 ```
 
 Then inject it by the `polyfill` option:
 
 ```js
-import ResizeObserver from "resize-observer-polyfill";
+import ResizeObserver from "@juggle/resize-observer";
 
 const { width, height } = useDimensions(ref, { polyfill: ResizeObserver });
 ```
@@ -173,9 +208,20 @@ const { width, height } = useDimensions(ref, { polyfill: ResizeObserver });
 Or pollute the `window` object:
 
 ```js
-import ResizeObserver from "resize-observer-polyfill";
+import ResizeObserver from "@juggle/resize-observer";
 
 if (!window.ResizeObserver) window.ResizeObserver = ResizeObserver;
+```
+
+You could use dynamic imports to only load the file when the polyfill is required:
+
+```js
+(async () => {
+  if (!window.ResizeObserver) {
+    const module = await import("@juggle/resize-observer");
+    window.ResizeObserver = module.ResizeObserver;
+  }
+})();
 ```
 
 ## Contributors ✨

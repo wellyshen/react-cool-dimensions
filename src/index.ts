@@ -4,6 +4,8 @@ import { RefObject, useState, useRef, useEffect, useCallback } from "react";
 
 export const observerErr =
   "💡react-cool-dimensions: the browser doesn't support Resize Observer, please use polyfill: https://github.com/wellyshen/react-cool-dimensions#resizeobserver-polyfill";
+export const borderBoxWarn =
+  "💡react-cool-dimensions: the browser doesn't support border-box size, fallback to content-box size. Please see: https://github.com/wellyshen/react-cool-dimensions#border-box-size-measurement";
 
 interface State {
   currentBreakpoint: string;
@@ -21,6 +23,7 @@ interface OnResize {
 }
 type Breakpoints = { [key: string]: number };
 export interface Options {
+  useBorderBoxSize?: boolean;
   breakpoints?: Breakpoints;
   onResize?: OnResize;
   polyfill?: any;
@@ -52,7 +55,7 @@ const getCurrentBreakpoint = (bps: Breakpoints, w: number): string => {
 
 const useDimensions = (
   ref: RefObject<HTMLElement>,
-  { breakpoints, onResize, polyfill }: Options = {}
+  { useBorderBoxSize = false, breakpoints, onResize, polyfill }: Options = {}
 ): Return => {
   const [state, setState] = useState<State>({
     currentBreakpoint: "",
@@ -63,6 +66,7 @@ const useDimensions = (
   const prevBreakpointRef = useRef<string>();
   const isObservingRef = useRef<boolean>(false);
   const observerRef = useRef<ResizeObserver>(null);
+  const warnedRef = useRef<boolean>(false);
   const onResizeRef = useRef<OnResize>(null);
 
   useEffect(() => {
@@ -96,17 +100,22 @@ const useDimensions = (
 
     observerRef.current = new (window.ResizeObserver || polyfill)(
       ([entry]: ResizeObserverEntry[]) => {
-        const { contentBoxSize, contentRect } = entry;
+        const { contentBoxSize, borderBoxSize, contentRect } = entry;
+
+        let boxSize = contentBoxSize;
+        if (useBorderBoxSize) {
+          if (borderBoxSize) {
+            boxSize = borderBoxSize;
+          } else if (!warnedRef.current) {
+            console.warn(borderBoxWarn);
+            warnedRef.current = true;
+          }
+        }
         // @juggle/resize-observer polyfill has different data structure
-        const contentBoxSz = Array.isArray(contentBoxSize)
-          ? contentBoxSize[0]
-          : contentBoxSize;
-        const width = contentBoxSz
-          ? contentBoxSz.inlineSize
-          : contentRect.width;
-        const height = contentBoxSz
-          ? contentBoxSz.blockSize
-          : contentRect.height;
+        boxSize = Array.isArray(boxSize) ? boxSize[0] : boxSize;
+
+        const width = boxSize ? boxSize.inlineSize : contentRect.width;
+        const height = boxSize ? boxSize.blockSize : contentRect.height;
 
         if (
           width === prevSizeRef.current.width &&

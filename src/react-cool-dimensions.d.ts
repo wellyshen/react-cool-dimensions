@@ -29,6 +29,7 @@ declare module "react-cool-dimensions" {
   }
 
   interface Options {
+    useBorderBoxSize?: boolean;
     breakpoints?: { [key: string]: number };
     onResize?: OnResize;
     polyfill?: any;
