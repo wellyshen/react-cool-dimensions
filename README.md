@@ -210,14 +210,14 @@ Or pollute the `window` object:
 ```js
 import ResizeObserver from "@juggle/resize-observer";
 
-if (!window.ResizeObserver) window.ResizeObserver = ResizeObserver;
+if (!("ResizeObserver" in window)) window.ResizeObserver = ResizeObserver;
 ```
 
 You could use dynamic imports to only load the file when the polyfill is required:
 
 ```js
 (async () => {
-  if (!window.ResizeObserver) {
+  if (!("ResizeObserver" in window)) {
     const module = await import("@juggle/resize-observer");
     window.ResizeObserver = module.ResizeObserver;
   }
