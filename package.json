@@ -154,7 +154,7 @@
     "babel-plugin-emotion": "^10.0.33",
     "coveralls": "^3.1.0",
     "eslint": "^6.8.0",
-    "eslint-config-welly": "^1.0.0",
+    "eslint-config-welly": "^1.1.2",
     "husky": "^4.2.5",
     "jest": "^26.0.1",
     "lint-staged": "^10.2.2",
