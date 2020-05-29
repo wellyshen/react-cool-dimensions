@@ -19,7 +19,7 @@ import {
   controller,
 } from "./styles";
 
-const App: FC<{}> = () => {
+const App: FC = () => {
   const [size, setSize] = useState<{ w: number; h: number }>({
     w: 250,
     h: 300,

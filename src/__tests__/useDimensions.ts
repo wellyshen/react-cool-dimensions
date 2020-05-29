@@ -20,7 +20,13 @@ describe("useDimensions", () => {
     return renderHook(() => useDimensions(target, rest)).result;
   };
 
-  let callback: Function;
+  interface Event {
+    borderBoxSize?: { blockSize: number; inlineSize: number };
+    contentBoxSize?: { blockSize: number; inlineSize: number };
+    contentRect?: { width: number; height?: number };
+  }
+
+  let callback: (e: Event[]) => void;
   const observe = jest.fn();
   const disconnect = jest.fn();
   const mockResizeObserver = jest.fn((cb) => ({
@@ -30,12 +36,6 @@ describe("useDimensions", () => {
     },
     disconnect,
   }));
-
-  interface Event {
-    borderBoxSize?: { blockSize: number; inlineSize: number };
-    contentBoxSize?: { blockSize: number; inlineSize: number };
-    contentRect?: { width: number; height?: number };
-  }
 
   const triggerObserverCb = (e: Event): void => {
     callback([e]);
