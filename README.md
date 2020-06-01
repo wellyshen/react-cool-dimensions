@@ -200,7 +200,7 @@ $ npm install --save @juggle/resize-observer
 Then inject it by the `polyfill` option:
 
 ```js
-import ResizeObserver from "@juggle/resize-observer";
+import { ResizeObserver } from "@juggle/resize-observer";
 
 const { width, height } = useDimensions(ref, { polyfill: ResizeObserver });
 ```
@@ -208,7 +208,7 @@ const { width, height } = useDimensions(ref, { polyfill: ResizeObserver });
 Or pollute the `window` object:
 
 ```js
-import ResizeObserver from "@juggle/resize-observer";
+import { ResizeObserver } from "@juggle/resize-observer";
 
 if (!("ResizeObserver" in window)) window.ResizeObserver = ResizeObserver;
 ```
