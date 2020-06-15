@@ -28,14 +28,16 @@ declare module "react-cool-dimensions" {
     (event: Event): void;
   }
 
-  interface Options {
+  interface Options<T> {
+    ref?: RefObject<T>;
     useBorderBoxSize?: boolean;
     breakpoints?: { [key: string]: number };
     onResize?: OnResize;
     polyfill?: any;
   }
 
-  interface Return {
+  interface Return<T> {
+    ref: RefObject<T>;
     readonly currentBreakpoint: string;
     readonly width: number;
     readonly height: number;
@@ -44,10 +46,7 @@ declare module "react-cool-dimensions" {
     readonly unobserve: () => void;
   }
 
-  const useDimensions: (
-    ref: RefObject<HTMLElement>,
-    options?: Options
-  ) => Return;
+  const useDimensions: <T>(options?: Options<T>) => Return<T>;
 
   export default useDimensions;
 }

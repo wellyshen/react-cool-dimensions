@@ -26,6 +26,7 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 - 🍰 Easy to handle [responsive components](#responsive-components), provides an alternative solution to the [container queries](https://wicg.github.io/container-queries) problem.
 - 📦 Supports [border-box size measurement](#border-box-size-measurement).
 - 🎛 Super flexible [API](#api) design to cover most cases for you.
+- 🔩 Supports custom `refs` for [some reasons](#use-your-own-ref).
 - 📜 Supports [TypeScript](https://www.typescriptlang.org) type definition.
 - 🗄️ Server-side rendering compatibility.
 - 🦠 Tiny size ([~ 1.6KB gzipped](https://bundlephobia.com/result?p=react-cool-dimensions)). No external dependencies, aside for the `react`.
@@ -55,12 +56,11 @@ $ npm install --save react-cool-dimensions
 To report the size of an element by the `width` and `height` states.
 
 ```js
-import React, { useRef } from "react";
+import React from "react";
 import useDimensions from "react-cool-dimensions";
 
 const App = () => {
-  const ref = useRef();
-  const { width, height, entry, unobserve, observe } = useDimensions(ref, {
+  const { ref, width, height, entry, unobserve, observe } = useDimensions({
     onResize: ({ width, height, entry, unobserve, observe }) => {
       // Triggered whenever the size of the target is changed
     },
@@ -81,12 +81,11 @@ We have [media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Q
 No worries, `react-cool-dimensions` provides an alternative solution for us! We can activate the **responsive mode** by the `breakpoints` option. It's a width-based solution, once it's activated we can easily apply different styles to a component according to the `currentBreakpoint` state. The overall concept as below.
 
 ```js
-import React, { useRef } from "react";
+import React from "react";
 import useDimensions from "react-cool-dimensions";
 
 const Card = () => {
-  const ref = useRef();
-  const { currentBreakpoint } = useDimensions(ref, {
+  const { ref, currentBreakpoint } = useDimensions({
     // The "currentBreakpoint" will be the object key based on the target's width
     // for instance, 0px - 319px (currentBreakpoint = XS), 320px - 479px (currentBreakpoint = SM) and so on
     breakpoints: { XS: 0, SM: 320, MD: 480, LG: 640 },
@@ -113,13 +112,12 @@ const Card = () => {
 By default, the hook reports the `width` and `height` based on the [content rectangle](https://developers.google.com/web/updates/2016/10/resizeobserver#what_is_being_reported) of the target element. We can include the padding and border for measuring by the `useBorderBoxSize` option. Please note, the `width` and `height` states are rely on the [ResizeObserverEntry.borderBoxSize](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry/borderBoxSize) but [it hasn't widely implemented by browsers](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry/borderBoxSize#Browser_compatibility) therefore we need to use [polyfill](#resizeobserver-polyfill) for this feature.
 
 ```js
-import React, { useRef } from "react";
+import React from "react";
 import useDimensions from "react-cool-dimensions";
 import { ResizeObserver } from "@juggle/resize-observer";
 
 const App = () => {
-  const ref = useRef();
-  const { width, height } = useDimensions(ref, {
+  const { ref, width, height } = useDimensions({
     useBorderBoxSize: true, // Tell the hook to measure based on the border-box size, default is false
     polyfill: ResizeObserver, // Use polyfill to make this feature works on more browsers
   });
@@ -141,6 +139,15 @@ const App = () => {
 };
 ```
 
+## Use Your Own `ref`
+
+In case of you had a ref already or you want to share a ref for other purposes. You can pass in the ref instead of using the one provided by this hook.
+
+```js
+const ref = useRef();
+const { width, height } = useDimensions({ ref });
+```
+
 ## Performance Optimization
 
 The `onResize` event will be triggered whenever the size of the target element is changed. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own throttled/debounced function as below.
@@ -148,7 +155,7 @@ The `onResize` event will be triggered whenever the size of the target element i
 ```js
 import _ from "lodash";
 
-const { width, height } = useDimensions(ref, {
+const { ref, width, height } = useDimensions({
   onResize: _.throttle(() => {
     // Triggered once per every 500 milliseconds
   }, 500),
@@ -167,6 +174,7 @@ It's returned with the following properties.
 
 | Key                 | Type     | Default | Description                                                                                                            |
 | ------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `ref`               | object   |         | Used to set the target element for monitoring.                                                                         |
 | `width`             | number   |         | The width of the target element in pixel.                                                                              |
 | `height`            | number   |         | The height of the target element in pixel.                                                                             |
 | `currentBreakpoint` | string   |         | Indicates the current breakpoint of the [responsive components](#responsive-components).                               |
@@ -176,10 +184,11 @@ It's returned with the following properties.
 
 ### Parameters
 
-You must pass the `ref` to use this hook. The options provides the following configurations and event callback for you.
+The options provides the following configurations and event callback for you.
 
 | Key                | Type           | Default | Description                                                                                                                                                                                   |
 | ------------------ | -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ref`              | object         |         | For [some reasons](#use-your-own-ref), you can pass in your own `ref` instead of using the built-in.                                                                                          |
 | `breakpoints`      | object         |         | Activates the responsive mode for [responsive components](#responsive-components) or [performance optimization](#performance-optimization).                                                   |
 | `useBorderBoxSize` | boolean        | `false` | Tells the hook to [measure the target element based on the border-box size](#border-box-size-measurement).                                                                                    |
 | `onResize`         | function       |         | It's invoked whenever the size of the target element is changed. But in [responsive mode](#responsive-components), it's invoked based on the changing of the breakpoint rather than the size. |

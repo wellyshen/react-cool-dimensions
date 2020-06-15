@@ -22,13 +22,15 @@ interface OnResize {
   (event: Event): void;
 }
 type Breakpoints = { [key: string]: number };
-export interface Options {
+export interface Options<T> {
+  ref?: RefObject<T>;
   useBorderBoxSize?: boolean;
   breakpoints?: Breakpoints;
   onResize?: OnResize;
   polyfill?: any;
 }
-export interface Return {
+export interface Return<T> {
+  ref: RefObject<T>;
   readonly currentBreakpoint: string;
   readonly width: number;
   readonly height: number;
@@ -53,10 +55,13 @@ const getCurrentBreakpoint = (bps: Breakpoints, w: number): string => {
   return curBp;
 };
 
-const useDimensions = (
-  ref: RefObject<HTMLElement>,
-  { useBorderBoxSize = false, breakpoints, onResize, polyfill }: Options = {}
-): Return => {
+const useDimensions = <T>({
+  ref: refOpt,
+  useBorderBoxSize = false,
+  breakpoints,
+  onResize,
+  polyfill,
+}: Options<T> = {}): Return<T> => {
   const [state, setState] = useState<State>({
     currentBreakpoint: "",
     width: 0,
@@ -68,6 +73,8 @@ const useDimensions = (
   const observerRef = useRef<ResizeObserver>(null);
   const warnedRef = useRef<boolean>(false);
   const onResizeRef = useRef<OnResize>(null);
+  const refVar = useRef<T>(null);
+  const ref = refOpt || refVar;
 
   useEffect(() => {
     onResizeRef.current = onResize;
@@ -76,7 +83,7 @@ const useDimensions = (
   const observe = useCallback((): void => {
     if (isObservingRef.current || !observerRef.current) return;
 
-    observerRef.current.observe(ref.current);
+    observerRef.current.observe(ref.current as any);
     isObservingRef.current = true;
   }, [ref]);
 
@@ -88,7 +95,7 @@ const useDimensions = (
   }, []);
 
   useEffect(() => {
-    if (!ref || !ref.current) return (): void => null;
+    if (!ref.current) return (): void => null;
 
     if (
       (!("ResizeObserver" in window) || !("ResizeObserverEntry" in window)) &&
@@ -162,7 +169,7 @@ const useDimensions = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref, JSON.stringify(breakpoints), observe, unobserve]);
 
-  return { ...state, observe, unobserve };
+  return { ref, ...state, observe, unobserve };
 };
 
 export default useDimensions;

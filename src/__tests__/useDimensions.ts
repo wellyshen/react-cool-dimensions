@@ -1,4 +1,3 @@
-import { RefObject } from "react";
 import { renderHook, act } from "@testing-library/react-hooks";
 
 import useDimensions, {
@@ -9,15 +8,12 @@ import useDimensions, {
 } from "..";
 
 describe("useDimensions", () => {
-  interface Args extends Options {
-    target?: RefObject<HTMLDivElement>;
-  }
-
+  const target = { current: document.createElement("div") };
   const renderHelper = ({
-    target = { current: document.createElement("div") },
+    ref = target,
     ...rest
-  }: Args = {}): { current: Current } => {
-    return renderHook(() => useDimensions(target, rest)).result;
+  }: Options<HTMLDivElement> = {}): { current: Current<HTMLDivElement> } => {
+    return renderHook(() => useDimensions({ ref, ...rest })).result;
   };
 
   interface Event {
@@ -49,7 +45,7 @@ describe("useDimensions", () => {
   });
 
   it("should not start observe if the target isn't set", () => {
-    renderHelper({ target: null });
+    renderHelper({ ref: null });
     expect(observe).not.toHaveBeenCalled();
   });
 
@@ -64,6 +60,14 @@ describe("useDimensions", () => {
     result.current.unobserve();
     result.current.observe();
     expect(observe).toHaveBeenCalledTimes(3);
+  });
+
+  it("should return workable ref", () => {
+    const result = renderHelper({ ref: null });
+    expect(result.current.ref).toStrictEqual({ current: null });
+
+    result.current.ref = target;
+    expect(result.current.ref).toStrictEqual(target);
   });
 
   it("should return width and height correctly", () => {
