@@ -217,9 +217,13 @@ const { width, height } = useDimensions(ref, { polyfill: ResizeObserver });
 Or pollute the `window` object:
 
 ```js
-import { ResizeObserver } from "@juggle/resize-observer";
+import { ResizeObserver, ResizeObserverEntry } from "@juggle/resize-observer";
 
-if (!("ResizeObserver" in window)) window.ResizeObserver = ResizeObserver;
+if (!("ResizeObserver" in window)) {
+  window.ResizeObserver = ResizeObserver;
+  // Only use it when you have this trouble: https://github.com/wellyshen/react-cool-dimensions/issues/45
+  // window.ResizeObserverEntry = ResizeObserverEntry;
+}
 ```
 
 You could use dynamic imports to only load the file when the polyfill is required:
@@ -229,6 +233,8 @@ You could use dynamic imports to only load the file when the polyfill is require
   if (!("ResizeObserver" in window)) {
     const module = await import("@juggle/resize-observer");
     window.ResizeObserver = module.ResizeObserver;
+    // Only use it when you have this trouble: https://github.com/wellyshen/react-cool-dimensions/issues/45
+    // window.ResizeObserverEntry = module.ResizeObserverEntry;
   }
 })();
 ```
