@@ -46,7 +46,9 @@ declare module "react-cool-dimensions" {
     readonly unobserve: () => void;
   }
 
-  const useDimensions: <T>(options?: Options<T>) => Return<T>;
+  const useDimensions: <T extends HTMLElement>(
+    options?: Options<T>
+  ) => Return<T>;
 
   export default useDimensions;
 }

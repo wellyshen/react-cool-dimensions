@@ -55,7 +55,7 @@ const getCurrentBreakpoint = (bps: Breakpoints, w: number): string => {
   return curBp;
 };
 
-const useDimensions = <T>({
+const useDimensions = <T extends HTMLElement>({
   ref: refOpt,
   useBorderBoxSize = false,
   breakpoints,
@@ -83,7 +83,7 @@ const useDimensions = <T>({
   const observe = useCallback((): void => {
     if (isObservingRef.current || !observerRef.current) return;
 
-    observerRef.current.observe(ref.current as any);
+    observerRef.current.observe(ref.current);
     isObservingRef.current = true;
   }, [ref]);
 
