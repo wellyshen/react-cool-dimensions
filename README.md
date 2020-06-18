@@ -165,7 +165,7 @@ const { ref, width, height } = useDimensions({
 ## API
 
 ```js
-const returnObj = useDimensions(ref: RefObject<HTMLElement>, options?: object);
+const returnObj = useDimensions(options?: object);
 ```
 
 ### Return object
@@ -174,7 +174,7 @@ It's returned with the following properties.
 
 | Key                 | Type     | Default | Description                                                                                                            |
 | ------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `ref`               | object   |         | Used to set the target element for monitoring.                                                                         |
+| `ref`               | object   |         | Used to set the target element for measuring.                                                                          |
 | `width`             | number   |         | The width of the target element in pixel.                                                                              |
 | `height`            | number   |         | The height of the target element in pixel.                                                                             |
 | `currentBreakpoint` | string   |         | Indicates the current breakpoint of the [responsive components](#responsive-components).                               |
@@ -182,9 +182,9 @@ It's returned with the following properties.
 | `unobserve`         | function |         | To stop observing the target element.                                                                                  |
 | `observe`           | function |         | To re-start observing the target element once it's stopped observing.                                                  |
 
-### Parameters
+### Parameter
 
-The options provides the following configurations and event callback for you.
+The `options` provides the following configurations and event callback for you.
 
 | Key                | Type           | Default | Description                                                                                                                                                                                   |
 | ------------------ | -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
