@@ -1,18 +1,13 @@
 import { renderHook, act } from "@testing-library/react-hooks";
 
-import useDimensions, {
-  Options,
-  Return as Current,
-  observerErr,
-  borderBoxWarn,
-} from "..";
+import useDimensions, { Options, observerErr, borderBoxWarn } from "..";
 
 describe("useDimensions", () => {
   const target = { current: document.createElement("div") };
   const renderHelper = ({
     ref = target,
     ...rest
-  }: Options<HTMLDivElement> = {}): { current: Current<HTMLDivElement> } =>
+  }: Options<HTMLDivElement> = {}) =>
     renderHook(() => useDimensions({ ref, ...rest })).result;
 
   interface Event {

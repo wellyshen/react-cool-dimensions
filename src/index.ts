@@ -29,7 +29,7 @@ export interface Options<T> {
   onResize?: OnResize;
   polyfill?: any;
 }
-export interface Return<T> {
+interface Return<T> {
   ref: RefObject<T>;
   readonly currentBreakpoint: string;
   readonly width: number;
