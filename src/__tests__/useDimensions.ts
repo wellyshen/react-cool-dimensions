@@ -12,9 +12,8 @@ describe("useDimensions", () => {
   const renderHelper = ({
     ref = target,
     ...rest
-  }: Options<HTMLDivElement> = {}): { current: Current<HTMLDivElement> } => {
-    return renderHook(() => useDimensions({ ref, ...rest })).result;
-  };
+  }: Options<HTMLDivElement> = {}): { current: Current<HTMLDivElement> } =>
+    renderHook(() => useDimensions({ ref, ...rest })).result;
 
   interface Event {
     borderBoxSize?: { blockSize: number; inlineSize: number };
