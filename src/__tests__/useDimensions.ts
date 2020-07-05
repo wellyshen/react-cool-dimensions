@@ -92,8 +92,7 @@ describe("useDimensions", () => {
       triggerObserverCb({ contentBoxSize });
       triggerObserverCb({ contentBoxSize });
     });
-    expect(console.warn).toHaveBeenCalledTimes(1);
-    expect(console.warn).toHaveBeenCalledWith(borderBoxWarn);
+    expect(console.warn).toHaveBeenNthCalledWith(1, borderBoxWarn);
     expect(result.current.width).toBe(contentBoxSize.blockSize);
     expect(result.current.height).toBe(contentBoxSize.inlineSize);
 
@@ -186,8 +185,7 @@ describe("useDimensions", () => {
       triggerObserverCb({ contentRect });
       triggerObserverCb({ contentRect });
     });
-    expect(onResize).toHaveBeenCalledTimes(1);
-    expect(onResize).toHaveBeenCalledWith({
+    expect(onResize).toHaveBeenNthCalledWith(1, {
       currentBreakpoint: "T0",
       width: contentRect.width,
       height: contentRect.height,
@@ -217,8 +215,7 @@ describe("useDimensions", () => {
     delete global.ResizeObserverEntry;
     renderHelper();
 
-    expect(console.error).toHaveBeenCalledTimes(2);
-    expect(console.error).toHaveBeenCalledWith(observerErr);
+    expect(console.error).toHaveBeenNthCalledWith(2, observerErr);
   });
 
   it("should use polyfill", () => {
