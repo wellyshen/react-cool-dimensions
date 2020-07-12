@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign, prefer-destructuring */
-
 import { RefObject, useState, useRef, useEffect, useCallback } from "react";
 
 export const observerErr =
@@ -105,6 +103,7 @@ const useDimensions = <T extends HTMLElement>({
       return (): void => null;
     }
 
+    // eslint-disable-next-line compat/compat
     observerRef.current = new (window.ResizeObserver || polyfill)(
       ([entry]: ResizeObserverEntry[]) => {
         const { contentBoxSize, borderBoxSize, contentRect } = entry;
