@@ -32,9 +32,9 @@ describe("useDimensions", () => {
   };
 
   beforeAll(() => {
-    // @ts-ignore
+    // @ts-expect-error
     global.ResizeObserver = mockResizeObserver;
-    // @ts-ignore
+    // @ts-expect-error
     global.ResizeObserverEntry = jest.fn();
   });
 
@@ -203,15 +203,15 @@ describe("useDimensions", () => {
     renderHelper();
     expect(console.error).not.toHaveBeenCalled();
 
-    // @ts-ignore
+    // @ts-expect-error
     delete global.ResizeObserver;
     renderHelper({ polyfill: mockResizeObserver });
     expect(console.error).not.toHaveBeenCalled();
 
     renderHelper();
-    // @ts-ignore
+    // @ts-expect-error
     global.ResizeObserver = mockResizeObserver;
-    // @ts-ignore
+    // @ts-expect-error
     delete global.ResizeObserverEntry;
     renderHelper();
 
@@ -219,9 +219,9 @@ describe("useDimensions", () => {
   });
 
   it("should use polyfill", () => {
-    // @ts-ignore
+    // @ts-expect-error
     delete global.ResizeObserver;
-    // @ts-ignore
+    // @ts-expect-error
     delete global.ResizeObserverEntry;
     renderHelper({ polyfill: mockResizeObserver });
     expect(observe).toHaveBeenCalledTimes(17);
