@@ -6,7 +6,10 @@ const { sm, md, lg } = mq;
 
 export const root = css`
   body {
-    font-family: "Open Sans", sans-serif;
+    font-family: "Roboto", sans-serif;
+    h1 {
+      font-family: "Bungee Shade", cursive;
+    }
   }
 `;
 
@@ -15,6 +18,7 @@ export const container = css`
   flex-direction: column;
   align-items: center;
   padding: 5rem 5%;
+  text-align: center;
   ${sm} {
     padding-left: 10%;
     padding-right: 10%;
@@ -30,94 +34,41 @@ export const container = css`
 `;
 
 export const title = css`
-  margin: 0 0 0.75rem;
-  text-align: center;
+  margin: 0 0 1rem;
+  font-size: 8vw;
+  ${md} {
+    font-size: 4vw;
+  }
 `;
 
 export const subtitle = css`
-  margin: 0 0 2.5rem;
+  margin: 0 0 5rem;
+  font-size: 3vw;
+  ${md} {
+    font-size: 1.5vw;
+  }
 `;
 
-export const banner = css`
+export const frame = css`
+  position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 8rem;
-  font-size: 1.5rem;
+  border: 5px dashed #ccc;
+`;
+
+export const bp = css`
+  font-size: 2rem;
   font-weight: bold;
-  color: #fff;
-  background: #aaa;
-`;
-
-export const cardWrapper = css`
-  padding: 1rem;
-`;
-
-export const card = css`
-  &:not(:last-of-type) {
-    margin-bottom: 1rem;
-  }
-  > div:first-of-type {
-    margin-bottom: 0.5rem;
-    height: 4rem;
-    background: #ccc;
-  }
-  > div:last-of-type div {
-    margin-bottom: 0.3rem;
-    height: 0.5rem;
-    background: #eee;
-    &:last-of-type {
-      width: 70%;
-    }
-  }
-`;
-
-export const page = css`
-  position: relative;
-  border: 1px solid #777;
-`;
-
-export const pageMD = css`
-  .css-${card.name} {
-    display: flex;
-    > div:first-of-type {
-      flex: 1;
-      margin: 0 0.5rem 0 0;
-    }
-    > div:last-of-type {
-      flex: 1;
-    }
-  }
-`;
-
-export const pageLG = css`
-  .css-${banner.name} {
-    margin: 1rem 1rem 0;
-  }
-  .css-${cardWrapper.name} {
-    display: flex;
-  }
-  .css-${card.name} {
-    flex: 1;
-    &:not(:last-of-type) {
-      margin-right: 0.5rem;
-    }
-  }
-`;
-
-export const content = css`
-  height: 100%;
-  overflow-y: scroll;
 `;
 
 export const controller = css`
   position: absolute;
-  right: -5px;
-  bottom: -5px;
-  width: 10px;
-  height: 10px;
-  background: #fff;
-  border-radius: 50%;
-  border: 1px solid #777;
+  right: -11px;
+  bottom: -11px;
+  width: 22px;
+  height: 22px;
+  background: #000;
   cursor: nwse-resize;
 `;

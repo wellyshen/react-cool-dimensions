@@ -9,13 +9,8 @@ import {
   container,
   title,
   subtitle,
-  page,
-  pageMD,
-  pageLG,
-  content,
-  banner,
-  cardWrapper,
-  card,
+  frame,
+  bp,
   controller,
 } from "./styles";
 
@@ -27,7 +22,7 @@ const App: FC = () => {
   const { ref, currentBreakpoint, width, height } = useDimensions<
     HTMLDivElement
   >({
-    breakpoints: { SM: 0, MD: 350, LG: 600 },
+    breakpoints: { XS: 0, SM: 100, MD: 200, LG: 300, XL: 400 },
   });
 
   const resize = (x: number, y: number): void => {
@@ -66,25 +61,6 @@ const App: FC = () => {
     }
   };
 
-  const renderCards = (num: number): JSX.Element[] => {
-    const cards = [];
-
-    while (cards.length < num) {
-      cards.push(
-        <div key={cards.length} css={card}>
-          <div />
-          <div>
-            <div />
-            <div />
-            <div />
-          </div>
-        </div>
-      );
-    }
-
-    return cards;
-  };
-
   return (
     <>
       <Global
@@ -95,25 +71,19 @@ const App: FC = () => {
       />
       <div css={container}>
         <GitHubCorner url="https://github.com/wellyshen/react-cool-dimensions" />
-        <h1 css={title}>React Cool Dimensions</h1>
+        <h1 css={title}>REACT COOL DIMENSIONS</h1>
         <p css={subtitle}>
           React hook to measure an element&apos;s size and handle responsive
           components.
         </p>
         <div
-          css={[
-            page,
-            currentBreakpoint !== "SM" && pageMD,
-            currentBreakpoint === "LG" && pageLG,
-          ]}
+          css={frame}
           style={{ width: `${size.w}px`, height: `${size.h}px` }}
           ref={ref}
         >
-          <div css={content}>
-            <div css={banner}>
-              {Math.round(width)} x {Math.round(height)} · {currentBreakpoint}
-            </div>
-            <div css={cardWrapper}>{renderCards(3)}</div>
+          <div css={bp}>{currentBreakpoint}</div>
+          <div>
+            {Math.floor(width)} x {Math.floor(height)}
           </div>
           {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
           <div

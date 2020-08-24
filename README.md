@@ -1,4 +1,4 @@
-# React Cool Dimensions
+# <em><b>REACT COOL DIMENSIONS</b></em>
 
 A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) that measure an element's size and handle [responsive components](#responsive-components) with highly-performant way, using [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver). Try it you will 👍🏻 it!
 
@@ -15,7 +15,7 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](https://github.com/wellyshen/react-cool-dimensions/blob/master/CONTRIBUTING.md)
 [![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fwellyshen%2Freact-cool-dimensions)](https://twitter.com/intent/tweet?text=With%20@react-cool-dimensions,%20I%20can%20build%20a%20performant%20web%20app.%20Thanks,%20@Welly%20Shen%20🤩)
 
-![demo](https://user-images.githubusercontent.com/21308003/82219976-9eddf080-9950-11ea-8ca8-cb6cab41222b.gif)
+![demo](https://user-images.githubusercontent.com/21308003/91013915-0f18a400-e61b-11ea-9232-291284159cac.gif)
 
 ⚡️ Try yourself: https://react-cool-dimensions.netlify.app
 
