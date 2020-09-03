@@ -25,22 +25,22 @@ const App: FC = () => {
     breakpoints: { XS: 0, SM: 100, MD: 200, LG: 300, XL: 400 },
   });
 
-  const resize = (x: number, y: number): void => {
+  const resize = (x: number, y: number) => {
     if (!ref.current) return;
     const { left: offsetX, top: offsetY } = ref.current.getBoundingClientRect();
     setSize({ w: x - offsetX, h: y - offsetY });
   };
 
-  const handleMouseMove = (e: MouseEvent): void => {
+  const handleMouseMove = (e: MouseEvent) => {
     e.preventDefault();
     resize(e.pageX, e.pageY);
   };
 
-  const handleTouchMove = (e: TouchEvent): void => {
+  const handleTouchMove = (e: TouchEvent) => {
     resize(e.touches[0].pageX, e.touches[0].pageY);
   };
 
-  const handleDragStart = (): void => {
+  const handleDragStart = () => {
     if (typeof window.ontouchstart === "undefined") {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener(

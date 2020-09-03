@@ -20,14 +20,14 @@ describe("useDimensions", () => {
   const observe = jest.fn();
   const disconnect = jest.fn();
   const mockResizeObserver = jest.fn((cb) => ({
-    observe: (): void => {
+    observe: () => {
       callback = cb;
       observe();
     },
     disconnect,
   }));
 
-  const triggerObserverCb = (e: Event): void => {
+  const triggerObserverCb = (e: Event) => {
     callback([e]);
   };
 
