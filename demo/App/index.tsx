@@ -26,6 +26,7 @@ const App: FC = () => {
   });
 
   const resize = (x: number, y: number): void => {
+    if (!ref.current) return;
     const { left: offsetX, top: offsetY } = ref.current.getBoundingClientRect();
     setSize({ w: x - offsetX, h: y - offsetY });
   };
@@ -52,9 +53,9 @@ const App: FC = () => {
     } else {
       document.addEventListener("touchmove", handleTouchMove);
       document.addEventListener(
-        "touchmove",
+        "touchend",
         () => {
-          document.removeEventListener("mousemove", handleTouchMove);
+          document.removeEventListener("touchmove", handleTouchMove);
         },
         { once: true }
       );

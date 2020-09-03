@@ -1,4 +1,11 @@
-import { RefObject, useState, useRef, useEffect, useCallback } from "react";
+import {
+  RefObject,
+  MutableRefObject,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
 
 export const observerErr =
   "💡react-cool-dimensions: the browser doesn't support Resize Observer, please use polyfill: https://github.com/wellyshen/react-cool-dimensions#resizeobserver-polyfill";
@@ -68,20 +75,20 @@ const useDimensions = <T extends HTMLElement>({
   const prevSizeRef = useRef<{ width?: number; height?: number }>({});
   const prevBreakpointRef = useRef<string>();
   const isObservingRef = useRef<boolean>(false);
-  const observerRef = useRef<ResizeObserver>(null);
+  const observerRef: MutableRefObject<ResizeObserver | null> = useRef(null);
+  const onResizeRef: MutableRefObject<OnResize | null> = useRef(null);
   const warnedRef = useRef<boolean>(false);
-  const onResizeRef = useRef<OnResize>(null);
   const refVar = useRef<T>(null);
   const ref = refOpt || refVar;
 
   useEffect(() => {
-    onResizeRef.current = onResize;
+    if (onResize) onResizeRef.current = onResize;
   }, [onResize]);
 
   const observe = useCallback((): void => {
     if (isObservingRef.current || !observerRef.current) return;
 
-    observerRef.current.observe(ref.current);
+    observerRef.current.observe(ref.current as Element);
     isObservingRef.current = true;
   }, [ref]);
 
@@ -93,72 +100,70 @@ const useDimensions = <T extends HTMLElement>({
   }, []);
 
   useEffect(() => {
-    if (!ref.current) return (): void => null;
+    if (!ref.current) return () => null;
 
     if (
       (!("ResizeObserver" in window) || !("ResizeObserverEntry" in window)) &&
       !polyfill
     ) {
       console.error(observerErr);
-      return (): void => null;
+      return () => null;
     }
 
     // eslint-disable-next-line compat/compat
-    observerRef.current = new (window.ResizeObserver || polyfill)(
-      ([entry]: ResizeObserverEntry[]) => {
-        const { contentBoxSize, borderBoxSize, contentRect } = entry;
+    observerRef.current = new (window.ResizeObserver || polyfill)(([entry]) => {
+      const { contentBoxSize, borderBoxSize, contentRect } = entry;
 
-        let boxSize = contentBoxSize;
-        if (useBorderBoxSize) {
-          if (borderBoxSize) {
-            boxSize = borderBoxSize;
-          } else if (!warnedRef.current) {
-            console.warn(borderBoxWarn);
-            warnedRef.current = true;
-          }
+      let boxSize = contentBoxSize;
+      if (useBorderBoxSize) {
+        if (borderBoxSize) {
+          boxSize = borderBoxSize;
+        } else if (!warnedRef.current) {
+          console.warn(borderBoxWarn);
+          warnedRef.current = true;
         }
-        // @juggle/resize-observer polyfill has different data structure
-        boxSize = Array.isArray(boxSize) ? boxSize[0] : boxSize;
-
-        const width = boxSize ? boxSize.inlineSize : contentRect.width;
-        const height = boxSize ? boxSize.blockSize : contentRect.height;
-
-        if (
-          width === prevSizeRef.current.width &&
-          height === prevSizeRef.current.height
-        )
-          return;
-
-        prevSizeRef.current = { width, height };
-
-        const e = {
-          currentBreakpoint: "",
-          width,
-          height,
-          entry,
-          observe,
-          unobserve,
-        };
-
-        if (breakpoints) {
-          e.currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
-
-          if (e.currentBreakpoint !== prevBreakpointRef.current) {
-            if (onResizeRef.current) onResizeRef.current(e);
-            prevBreakpointRef.current = e.currentBreakpoint;
-          }
-        } else if (onResizeRef.current) {
-          onResizeRef.current(e);
-        }
-
-        setState({
-          currentBreakpoint: e.currentBreakpoint,
-          width,
-          height,
-          entry,
-        });
       }
-    );
+      // @juggle/resize-observer polyfill has different data structure
+      boxSize = Array.isArray(boxSize) ? boxSize[0] : boxSize;
+
+      const width = boxSize ? boxSize.inlineSize : contentRect.width;
+      const height = boxSize ? boxSize.blockSize : contentRect.height;
+
+      if (
+        width === prevSizeRef.current.width &&
+        height === prevSizeRef.current.height
+      )
+        return;
+
+      prevSizeRef.current = { width, height };
+
+      const e = {
+        currentBreakpoint: "",
+        width,
+        height,
+        entry,
+        observe,
+        unobserve,
+      };
+
+      if (breakpoints) {
+        e.currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
+
+        if (e.currentBreakpoint !== prevBreakpointRef.current) {
+          if (onResizeRef.current) onResizeRef.current(e);
+          prevBreakpointRef.current = e.currentBreakpoint;
+        }
+      } else if (onResizeRef.current) {
+        onResizeRef.current(e);
+      }
+
+      setState({
+        currentBreakpoint: e.currentBreakpoint,
+        width,
+        height,
+        entry,
+      });
+    });
 
     observe();
 

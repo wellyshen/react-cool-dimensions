@@ -39,6 +39,7 @@ describe("useDimensions", () => {
   });
 
   it("should not start observe if the target isn't set", () => {
+    // @ts-expect-error
     renderHelper({ ref: null });
     expect(observe).not.toHaveBeenCalled();
   });
@@ -57,6 +58,7 @@ describe("useDimensions", () => {
   });
 
   it("should return workable ref", () => {
+    // @ts-expect-error
     const result = renderHelper({ ref: null });
     expect(result.current.ref).toStrictEqual({ current: null });
 
