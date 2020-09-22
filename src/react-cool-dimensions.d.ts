@@ -36,14 +36,9 @@ declare module "react-cool-dimensions" {
     polyfill?: any;
   }
 
-  interface Return<T> {
+  interface Return<T> extends Readonly<Omit<Event, "entry">> {
     ref: RefObject<T>;
-    readonly currentBreakpoint: string;
-    readonly width: number;
-    readonly height: number;
     readonly entry?: ResizeObserverEntry;
-    readonly observe: () => void;
-    readonly unobserve: () => void;
   }
 
   const useDimensions: <T extends HTMLElement>(
