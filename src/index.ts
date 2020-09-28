@@ -36,7 +36,7 @@ export interface Options<T> {
 }
 interface Return<T> extends Readonly<Omit<Event, "entry">> {
   ref: RefObject<T>;
-  readonly entry?: ResizeObserverEntry;
+  entry?: ResizeObserverEntry;
 }
 
 const getCurrentBreakpoint = (bps: Breakpoints, w: number): string => {

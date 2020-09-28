@@ -38,7 +38,7 @@ declare module "react-cool-dimensions" {
 
   interface Return<T> extends Readonly<Omit<Event, "entry">> {
     ref: RefObject<T>;
-    readonly entry?: ResizeObserverEntry;
+    entry?: ResizeObserverEntry;
   }
 
   const useDimensions: <T extends HTMLElement>(
