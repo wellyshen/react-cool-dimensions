@@ -34,7 +34,7 @@ export interface Options<T> {
   onResize?: OnResize;
   polyfill?: any;
 }
-interface Return<T> extends Readonly<Omit<Event, "entry">> {
+interface Return<T> extends Omit<Event, "entry"> {
   ref: RefObject<T>;
   entry?: ResizeObserverEntry;
 }
