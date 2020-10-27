@@ -1,11 +1,4 @@
-import {
-  RefObject,
-  MutableRefObject,
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-} from "react";
+import { RefObject, useState, useRef, useEffect, useCallback } from "react";
 
 export const observerErr =
   "💡react-cool-dimensions: the browser doesn't support Resize Observer, please use polyfill: https://github.com/wellyshen/react-cool-dimensions#resizeobserver-polyfill";
@@ -70,8 +63,8 @@ const useDimensions = <T extends HTMLElement>({
   const prevSizeRef = useRef<{ width?: number; height?: number }>({});
   const prevBreakpointRef = useRef<string>();
   const isObservingRef = useRef<boolean>(false);
-  const observerRef: MutableRefObject<ResizeObserver | null> = useRef(null);
-  const onResizeRef: MutableRefObject<OnResize | null> = useRef(null);
+  const observerRef = useRef<ResizeObserver | null>(null);
+  const onResizeRef = useRef<OnResize | null>(null);
   const warnedRef = useRef<boolean>(false);
   const refVar = useRef<T>(null);
   const ref = refOpt || refVar;
