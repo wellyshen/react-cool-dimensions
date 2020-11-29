@@ -8,7 +8,7 @@ describe("useDimensions", () => {
     ref = target,
     ...rest
   }: Options<HTMLDivElement> = {}) =>
-    renderHook(() => useDimensions({ ref, ...rest })).result;
+    renderHook(() => useDimensions({ ref, ...rest }));
 
   interface Event {
     borderBoxSize?: { blockSize: number; inlineSize: number };
@@ -31,6 +31,11 @@ describe("useDimensions", () => {
     callback([e]);
   };
 
+  beforeEach(() => {
+    observe.mockClear();
+    disconnect.mockClear();
+  });
+
   beforeAll(() => {
     // @ts-expect-error
     global.ResizeObserver = mockResizeObserver;
@@ -45,21 +50,21 @@ describe("useDimensions", () => {
   });
 
   it("should return workable unobserve method", () => {
-    const result = renderHelper();
+    const { result } = renderHelper();
     result.current.unobserve();
     expect(disconnect).toHaveBeenCalledTimes(1);
   });
 
   it("should return workable observe method", () => {
-    const result = renderHelper();
+    const { result } = renderHelper();
     result.current.unobserve();
     result.current.observe();
-    expect(observe).toHaveBeenCalledTimes(3);
+    expect(observe).toHaveBeenCalledTimes(2);
   });
 
   it("should return workable ref", () => {
     // @ts-expect-error
-    const result = renderHelper({ ref: null });
+    const { result } = renderHelper({ ref: null });
     expect(result.current.ref).toStrictEqual({ current: null });
 
     result.current.ref = target;
@@ -67,7 +72,7 @@ describe("useDimensions", () => {
   });
 
   it("should return width and height correctly", () => {
-    const result = renderHelper();
+    const { result } = renderHelper();
     expect(result.current.width).toBe(0);
     expect(result.current.height).toBe(0);
 
@@ -88,7 +93,7 @@ describe("useDimensions", () => {
 
   it("should use border-box size", () => {
     console.warn = jest.fn();
-    let result = renderHelper({ useBorderBoxSize: true });
+    let { result } = renderHelper({ useBorderBoxSize: true });
     const contentBoxSize = { blockSize: 100, inlineSize: 100 };
     act(() => {
       triggerObserverCb({ contentBoxSize });
@@ -99,7 +104,7 @@ describe("useDimensions", () => {
     expect(result.current.height).toBe(contentBoxSize.inlineSize);
 
     console.warn = jest.fn();
-    result = renderHelper({ useBorderBoxSize: true });
+    result = renderHelper({ useBorderBoxSize: true }).result;
     const borderBoxSize = { blockSize: 110, inlineSize: 110 };
     act(() => {
       triggerObserverCb({ contentBoxSize, borderBoxSize });
@@ -110,10 +115,10 @@ describe("useDimensions", () => {
   });
 
   it("should return currentBreakpoint correctly", () => {
-    let result = renderHelper();
+    let { result } = renderHelper();
     expect(result.current.currentBreakpoint).toBe("");
 
-    result = renderHelper({ breakpoints: { T1: 100 } });
+    result = renderHelper({ breakpoints: { T1: 100 } }).result;
     act(() => {
       triggerObserverCb({ contentRect: { width: 0 } });
     });
@@ -123,7 +128,7 @@ describe("useDimensions", () => {
     });
     expect(result.current.currentBreakpoint).toBe("");
 
-    result = renderHelper({ breakpoints: { T0: 0, T1: 100 } });
+    result = renderHelper({ breakpoints: { T0: 0, T1: 100 } }).result;
     act(() => {
       triggerObserverCb({ contentRect: { width: 0 } });
     });
@@ -144,7 +149,7 @@ describe("useDimensions", () => {
   });
 
   it("should return entry correctly", () => {
-    const result = renderHelper();
+    const { result } = renderHelper();
     expect(result.current.entry).toBeUndefined();
 
     const e = { contentRect: { width: 100, height: 100 } };
@@ -152,6 +157,12 @@ describe("useDimensions", () => {
       triggerObserverCb(e);
     });
     expect(result.current.entry).toStrictEqual(e);
+  });
+
+  it("should stop observe when un-mount", () => {
+    const { unmount } = renderHelper();
+    unmount();
+    expect(disconnect).toHaveBeenCalledTimes(1);
   });
 
   it("should trigger onResize without breakpoints", () => {
@@ -172,8 +183,8 @@ describe("useDimensions", () => {
       observe: expect.any(Function),
       unobserve: expect.any(Function),
     });
-    expect(disconnect).toHaveBeenCalledTimes(11);
-    expect(observe).toHaveBeenCalledTimes(12);
+    expect(disconnect).toHaveBeenCalledTimes(1);
+    expect(observe).toHaveBeenCalledTimes(2);
   });
 
   it("should trigger onResize with breakpoints", () => {
@@ -195,8 +206,8 @@ describe("useDimensions", () => {
       observe: expect.any(Function),
       unobserve: expect.any(Function),
     });
-    expect(disconnect).toHaveBeenCalledTimes(13);
-    expect(observe).toHaveBeenCalledTimes(14);
+    expect(disconnect).toHaveBeenCalledTimes(1);
+    expect(observe).toHaveBeenCalledTimes(2);
   });
 
   it("should throw resize observer error", () => {
@@ -226,6 +237,6 @@ describe("useDimensions", () => {
     // @ts-expect-error
     delete global.ResizeObserverEntry;
     renderHelper({ polyfill: mockResizeObserver });
-    expect(observe).toHaveBeenCalledTimes(17);
+    expect(observe).toHaveBeenCalledTimes(1);
   });
 });
