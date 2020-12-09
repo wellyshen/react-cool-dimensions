@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { Global, css } from "@emotion/react";
 import normalize from "normalize.css";
 
@@ -19,9 +19,12 @@ const App: FC = () => {
     w: 250,
     h: 300,
   });
-  const { ref, currentBreakpoint, width, height } = useDimensions<
-    HTMLDivElement
-  >({
+  const {
+    ref,
+    currentBreakpoint,
+    width,
+    height,
+  } = useDimensions<HTMLDivElement>({
     breakpoints: { XS: 0, SM: 100, MD: 200, LG: 300, XL: 400 },
   });
 

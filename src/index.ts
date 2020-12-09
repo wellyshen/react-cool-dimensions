@@ -112,6 +112,7 @@ const useDimensions = <T extends HTMLElement>({
         }
       }
       // @juggle/resize-observer polyfill has different data structure
+      // @ts-expect-error
       boxSize = Array.isArray(boxSize) ? boxSize[0] : boxSize;
 
       // @ts-expect-error
