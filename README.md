@@ -56,7 +56,6 @@ $ npm install --save react-cool-dimensions
 To report the size of an element by the `width` and `height` states.
 
 ```js
-import React from "react";
 import useDimensions from "react-cool-dimensions";
 
 const App = () => {
@@ -81,7 +80,6 @@ We have [media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Q
 No worries, `react-cool-dimensions` provides an alternative solution for us! We can activate the **responsive mode** by the `breakpoints` option. It's a width-based solution, once it's activated we can easily apply different styles to a component according to the `currentBreakpoint` state. The overall concept as below.
 
 ```js
-import React from "react";
 import useDimensions from "react-cool-dimensions";
 
 const Card = () => {
@@ -112,7 +110,6 @@ const Card = () => {
 By default, the hook reports the `width` and `height` based on the [content rectangle](https://developers.google.com/web/updates/2016/10/resizeobserver#what_is_being_reported) of the target element. We can include the padding and border for measuring by the `useBorderBoxSize` option. Please note, the `width` and `height` states are rely on the [ResizeObserverEntry.borderBoxSize](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry/borderBoxSize) but [it hasn't widely implemented by browsers](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry/borderBoxSize#Browser_compatibility) therefore we need to use [polyfill](#resizeobserver-polyfill) for this feature.
 
 ```js
-import React from "react";
 import useDimensions from "react-cool-dimensions";
 import { ResizeObserver } from "@juggle/resize-observer";
 
