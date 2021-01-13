@@ -136,6 +136,65 @@ const App = () => {
 };
 ```
 
+## Dynamic Component
+
+There're two ways to use `react-cool-dimensions` with a dynamic show/hide component.
+
+Option 1, we can lazily start observing via the `observe` method:
+
+```js
+import { useState } from "react";
+import useDimensions from "react-cool-dimensions";
+
+const App = () => {
+  const [show, setShow] = useState(false);
+  const { width, height, observe } = useDimensions();
+
+  return (
+    <>
+      <button onClick={() => setShow(!show)}>Toggle</button>
+      {show && (
+        <div
+          ref={(el) => {
+            if (el) observe(el);
+          }}
+        >
+          Hi! My width is {width}px and height is {height}px
+        </div>
+      )}
+    </>
+  );
+};
+```
+
+Option 2, wrap the hook into a component:
+
+```js
+import { useState } from "react";
+import useDimensions from "react-cool-dimensions";
+
+const MyComponent = () => {
+  const { ref, width, height } = useDimensions();
+
+  return (
+    <div ref={ref}>
+      Hi! My width is {width}px and height is {height}px
+    </div>
+  );
+};
+
+const App = () => {
+  const [show, setShow] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setShow(!show)}>Toggle</button>
+      {show && <MyComponent />}
+    </>
+  );
+};
+```
+
 ## Use Your Own `ref`
 
 In case of you had a ref already or you want to share a ref for other purposes. You can pass in the ref instead of using the one provided by this hook.
@@ -177,7 +236,7 @@ It's returned with the following properties.
 | `currentBreakpoint` | string   |         | Indicates the current breakpoint of the [responsive components](#responsive-components).                               |
 | `entry`             | object   |         | The [ResizeObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry) of the target element. |
 | `unobserve`         | function |         | To stop observing the target element.                                                                                  |
-| `observe`           | function |         | To re-start observing the target element once it's stopped observing.                                                  |
+| `observe`           | function |         | To [lazily start](#dynamic-component) or re-start observing the target element once it's stopped observing.            |
 
 ### Parameter
 
