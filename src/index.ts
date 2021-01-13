@@ -11,23 +11,23 @@ interface State {
   height: number;
   entry?: ResizeObserverEntry;
 }
-interface Event extends State {
+interface Event<T> extends State {
   entry: ResizeObserverEntry;
-  observe: () => void;
+  observe: (element?: T) => void;
   unobserve: () => void;
 }
-interface OnResize {
-  (event: Event): void;
+interface OnResize<T> {
+  (event: Event<T>): void;
 }
 type Breakpoints = { [key: string]: number };
 export interface Options<T> {
   ref?: RefObject<T>;
   useBorderBoxSize?: boolean;
   breakpoints?: Breakpoints;
-  onResize?: OnResize;
+  onResize?: OnResize<T>;
   polyfill?: any;
 }
-interface Return<T> extends Omit<Event, "entry"> {
+interface Return<T> extends Omit<Event<T>, "entry"> {
   ref: RefObject<T>;
   entry?: ResizeObserverEntry;
 }
@@ -62,34 +62,32 @@ const useDimensions = <T extends HTMLElement>({
   });
   const prevSizeRef = useRef<{ width?: number; height?: number }>({});
   const prevBreakpointRef = useRef<string>();
-  const isObservingRef = useRef<boolean>(false);
   const observerRef = useRef<ResizeObserver | null>(null);
-  const onResizeRef = useRef<OnResize | null>(null);
+  const onResizeRef = useRef<OnResize<T> | null>(null);
   const warnedRef = useRef<boolean>(false);
   const refVar = useRef<T>(null);
-  const ref = refOpt || refVar;
+  let ref = useRef<T | null>(refVar?.current);
+  ref = refOpt || ref;
 
   useEffect(() => {
     if (onResize) onResizeRef.current = onResize;
   }, [onResize]);
 
-  const observe = useCallback(() => {
-    if (isObservingRef.current || !observerRef.current) return;
-
-    observerRef.current.observe(ref.current as Element);
-    isObservingRef.current = true;
-  }, [ref]);
+  const observe = useCallback(
+    (element?: T) => {
+      if (element) ref.current = element;
+      if (observerRef.current && ref.current)
+        observerRef.current.observe(ref.current as HTMLElement);
+    },
+    [ref]
+  );
 
   const unobserve = useCallback(() => {
-    if (!isObservingRef.current || !observerRef.current) return;
-
-    observerRef.current.disconnect();
-    isObservingRef.current = false;
+    if (observerRef.current) observerRef.current.disconnect();
   }, []);
 
   useEffect(() => {
     if (!ref.current) return () => null;
-
     if (
       (!("ResizeObserver" in window) || !("ResizeObserverEntry" in window)) &&
       !polyfill
@@ -161,7 +159,7 @@ const useDimensions = <T extends HTMLElement>({
       unobserve();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref, JSON.stringify(breakpoints), observe, unobserve]);
+  }, [JSON.stringify(breakpoints), useBorderBoxSize, observe, unobserve]);
 
   return { ref, ...state, observe, unobserve };
 };
