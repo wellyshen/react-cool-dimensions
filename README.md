@@ -167,7 +167,7 @@ const App = () => {
 };
 ```
 
-Option 2, wrap the hook into a component:
+Option 2, wrap the hook into the dynamic component:
 
 ```js
 import { useState } from "react";
