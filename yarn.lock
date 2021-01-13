@@ -1570,7 +1570,7 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@typescript-eslint/eslint-plugin@^4.11.1":
+"@typescript-eslint/eslint-plugin@^4.13.0":
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.13.0.tgz#5f580ea520fa46442deb82c038460c3dd3524bb6"
   integrity sha512-ygqDUm+BUPvrr0jrXqoteMqmIaZ/bixYOc3A4BRwzEPTZPi6E+n44rzNZWaB0YvtukgP+aoj0i/fyx7FkM2p1w==
@@ -1607,7 +1607,7 @@
     eslint-scope "^5.0.0"
     eslint-utils "^2.0.0"
 
-"@typescript-eslint/parser@^4.11.1":
+"@typescript-eslint/parser@^4.13.0":
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-4.13.0.tgz#c413d640ea66120cfcc37f891e8cb3fd1c9d247d"
   integrity sha512-KO0J5SRF08pMXzq9+abyHnaGQgUJZ3Z3ax+pmqz9vl81JxmTTOUfQmq7/4awVfq09b6C4owNlOgOwp61pYRBSg==
@@ -3591,14 +3591,14 @@ eslint-config-prettier@^7.1.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-7.1.0.tgz#5402eb559aa94b894effd6bddfa0b1ca051c858f"
   integrity sha512-9sm5/PxaFG7qNJvJzTROMM1Bk1ozXVTKI0buKOyb0Bsr1hrwi0H/TzxF/COtf1uxikIK8SwhX7K6zg78jAzbeA==
 
-eslint-config-welly@^1.8.8:
-  version "1.8.8"
-  resolved "https://registry.yarnpkg.com/eslint-config-welly/-/eslint-config-welly-1.8.8.tgz#122685e4cad3ace65aec52e9f2623bae7ea8e712"
-  integrity sha512-JgTs+rOuyEiiXVJF5WKsTv4eYu404Amqyqub1iQ9F1P2dJDUrd/1txMj7pT+5MidgYT6uBIgDgB4jrlUl5Hjuw==
+eslint-config-welly@^1.8.9:
+  version "1.8.9"
+  resolved "https://registry.yarnpkg.com/eslint-config-welly/-/eslint-config-welly-1.8.9.tgz#c532b7b9c8185e1ab2528b1145b214244e3f7901"
+  integrity sha512-KvuhpkWofqvhbIcNB5fypyzpcMsXx2EwUgUpdvRq1p/jGyEqC+ljYjfBHB5QDNxufreP2/bw+DxUwBH67TVf3A==
   dependencies:
     "@emotion/eslint-plugin" "^11.0.0"
-    "@typescript-eslint/eslint-plugin" "^4.11.1"
-    "@typescript-eslint/parser" "^4.11.1"
+    "@typescript-eslint/eslint-plugin" "^4.13.0"
+    "@typescript-eslint/parser" "^4.13.0"
     eslint-config-airbnb "^18.2.1"
     eslint-config-prettier "^7.1.0"
     eslint-import-resolver-typescript "^2.3.0"
