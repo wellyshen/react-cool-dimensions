@@ -154,11 +154,7 @@ const App = () => {
     <>
       <button onClick={() => setShow(!show)}>Toggle</button>
       {show && (
-        <div
-          ref={(el) => {
-            if (el) observe(el);
-          }}
-        >
+        <div ref={observe}>
           Hi! My width is {width}px and height is {height}px
         </div>
       )}
