@@ -136,9 +136,9 @@ const App = () => {
 };
 ```
 
-## Dynamic Component
+## Conditional Component
 
-There're two ways to use `react-cool-dimensions` with a dynamic show/hide component.
+There're two ways to use `react-cool-dimensions` with a conditional component.
 
 Option 1, we can lazily start observing via the `observe` method:
 
@@ -163,7 +163,7 @@ const App = () => {
 };
 ```
 
-Option 2, wrap the hook into the dynamic component:
+Option 2, wrap the hook into the conditional component:
 
 ```js
 import { useState } from "react";
