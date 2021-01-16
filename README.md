@@ -26,6 +26,7 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 - 🍰 Easy to handle [responsive components](#responsive-components), provides an alternative solution to the [container queries](https://wicg.github.io/container-queries) problem.
 - 📦 Supports [border-box size measurement](#border-box-size-measurement).
 - 🎛 Super flexible [API](#api) design to cover most cases for you.
+- 🙈 Supports [conditional component](#conditional-component).
 - 🔩 Supports custom `refs` for [some reasons](#use-your-own-ref).
 - 📜 Supports [TypeScript](https://www.typescriptlang.org) type definition.
 - 🗄️ Server-side rendering compatibility.
@@ -232,7 +233,7 @@ It's returned with the following properties.
 | `currentBreakpoint` | string   |         | Indicates the current breakpoint of the [responsive components](#responsive-components).                               |
 | `entry`             | object   |         | The [ResizeObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry) of the target element. |
 | `unobserve`         | function |         | To stop observing the target element.                                                                                  |
-| `observe`           | function |         | To [lazily start](#dynamic-component) or re-start observing the target element once it's stopped observing.            |
+| `observe`           | function |         | To [lazily start](#conditional-component) or re-start observing the target element once it's stopped observing.            |
 
 ### Parameter
 
