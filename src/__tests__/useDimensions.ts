@@ -32,8 +32,7 @@ describe("useDimensions", () => {
   };
 
   beforeEach(() => {
-    observe.mockClear();
-    disconnect.mockClear();
+    jest.clearAllMocks();
   });
 
   beforeAll(() => {
