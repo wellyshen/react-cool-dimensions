@@ -19,12 +19,20 @@ interface Event<T> extends State {
 interface OnResize<T> {
   (event: Event<T>): void;
 }
+interface SetState {
+  (previous: State, next: State): State;
+}
 type Breakpoints = { [key: string]: number };
 export interface Options<T> {
   ref?: RefObject<T>;
   useBorderBoxSize?: boolean;
   breakpoints?: Breakpoints;
   onResize?: OnResize<T>;
+  /** If set, it will only update the state when a breakpoint is changed. */
+  onlyUpdateOnBreakpointChange?: boolean;
+  /** If you wish to conditionally update the internal state, for instance to
+   * reduce rerenders conditionally, you may use this custom-functionality */
+  customSetState?: SetState;
   polyfill?: any;
 }
 interface Return<T> extends Omit<Event<T>, "entry"> {
@@ -54,6 +62,8 @@ const useDimensions = <T extends HTMLElement>({
   breakpoints,
   onResize,
   polyfill,
+  customSetState,
+  onlyUpdateOnBreakpointChange,
 }: Options<T> = {}): Return<T> => {
   const [state, setState] = useState<State>({
     currentBreakpoint: "",
@@ -62,16 +72,22 @@ const useDimensions = <T extends HTMLElement>({
   });
   const prevSizeRef = useRef<{ width?: number; height?: number }>({});
   const prevBreakpointRef = useRef<string>();
-  const observerRef = useRef<ResizeObserver | null>(null);
+  const observerRef = useRef<any | null>(null);
   const onResizeRef = useRef<OnResize<T> | null>(null);
+  const customSetStateRef = useRef<SetState | null>(null);
   const warnedRef = useRef<boolean>(false);
   const refVar = useRef<T>(null);
   let ref = useRef<T | null>(refVar?.current);
   ref = refOpt || ref;
+  const breakpointsString = JSON.stringify(breakpoints);
 
   useEffect(() => {
     if (onResize) onResizeRef.current = onResize;
   }, [onResize]);
+
+  useEffect(() => {
+    if (customSetState) customSetStateRef.current = customSetState;
+  }, [customSetState]);
 
   const observe = useCallback(
     (element?: T) => {
@@ -145,12 +161,28 @@ const useDimensions = <T extends HTMLElement>({
         onResizeRef.current(e);
       }
 
-      setState({
+      const next = {
         currentBreakpoint: e.currentBreakpoint,
         width,
         height,
         entry,
-      });
+      };
+      if (customSetStateRef.current) {
+        setState((s) =>
+          customSetStateRef.current ? customSetStateRef.current(s, next) : next
+        );
+        return;
+      }
+      if (breakpoints && onlyUpdateOnBreakpointChange) {
+        setState((s) => {
+          if (s.currentBreakpoint === e.currentBreakpoint) {
+            return s;
+          }
+          return next;
+        });
+        return;
+      }
+      setState(next);
     });
 
     observe();
@@ -159,7 +191,13 @@ const useDimensions = <T extends HTMLElement>({
       unobserve();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(breakpoints), useBorderBoxSize, observe, unobserve]);
+  }, [
+    breakpointsString,
+    useBorderBoxSize,
+    observe,
+    unobserve,
+    onlyUpdateOnBreakpointChange,
+  ]);
 
   return { ref, ...state, observe, unobserve };
 };
