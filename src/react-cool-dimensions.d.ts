@@ -24,8 +24,19 @@ declare module "react-cool-dimensions" {
     unobserve: () => void;
   }
 
+  interface State {
+    currentBreakpoint: string;
+    width: number;
+    height: number;
+    entry?: ResizeObserverEntry;
+  }
+
   export interface OnResize<T extends HTMLElement = HTMLElement> {
     (event: Event<T>): void;
+  }
+
+  interface onShouldUpdate {
+    (previous: State, next: State): boolean;
   }
 
   export interface Options<T> {
