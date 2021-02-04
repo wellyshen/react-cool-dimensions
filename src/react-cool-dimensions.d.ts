@@ -36,7 +36,7 @@ declare module "react-cool-dimensions" {
   }
 
   interface OnShouldUpdate {
-    (previous: State, next: State): boolean;
+    (prevState: State, nextState: State): boolean;
   }
 
   export interface Options<T> {
