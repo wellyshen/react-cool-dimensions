@@ -24,15 +24,31 @@ declare module "react-cool-dimensions" {
     unobserve: () => void;
   }
 
+  interface State {
+    currentBreakpoint: string;
+    width: number;
+    height: number;
+    entry?: ResizeObserverEntry;
+  }
+
   export interface OnResize<T extends HTMLElement = HTMLElement> {
     (event: Event<T>): void;
   }
 
-  interface Options<T> {
+  interface OnShouldUpdate {
+    (previous: State, next: State): boolean;
+  }
+
+  export interface Options<T> {
     ref?: RefObject<T>;
     useBorderBoxSize?: boolean;
-    breakpoints?: { [key: string]: number };
+    breakpoints?: Record<string, number>;
     onResize?: OnResize<T>;
+    /** If set, it will only update the state when a breakpoint is changed. */
+    onlyUpdateOnBreakpointChange?: boolean;
+    /** If you wish to conditionally update the internal state, for instance to
+     * reduce rerenders conditionally, you may use this custom-functionality */
+    shouldUpdate?: OnShouldUpdate;
     polyfill?: any;
   }
 

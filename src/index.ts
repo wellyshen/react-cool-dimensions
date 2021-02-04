@@ -19,12 +19,20 @@ interface Event<T> extends State {
 interface OnResize<T> {
   (event: Event<T>): void;
 }
+interface OnShouldUpdate {
+  (previous: State, next: State): boolean;
+}
 type Breakpoints = { [key: string]: number };
 export interface Options<T> {
   ref?: RefObject<T>;
   useBorderBoxSize?: boolean;
   breakpoints?: Breakpoints;
   onResize?: OnResize<T>;
+  /** If set, it will only update the state when a breakpoint is changed. */
+  onlyUpdateOnBreakpointChange?: boolean;
+  /** If you wish to conditionally update the internal state, for instance to
+   * reduce rerenders conditionally, you may use this custom-functionality */
+  shouldUpdate?: OnShouldUpdate;
   polyfill?: any;
 }
 interface Return<T> extends Omit<Event<T>, "entry"> {
@@ -54,6 +62,8 @@ const useDimensions = <T extends HTMLElement>({
   breakpoints,
   onResize,
   polyfill,
+  shouldUpdate: customSetState,
+  onlyUpdateOnBreakpointChange,
 }: Options<T> = {}): Return<T> => {
   const [state, setState] = useState<State>({
     currentBreakpoint: "",
@@ -64,14 +74,27 @@ const useDimensions = <T extends HTMLElement>({
   const prevBreakpointRef = useRef<string>();
   const observerRef = useRef<ResizeObserver | null>(null);
   const onResizeRef = useRef<OnResize<T> | null>(null);
+  const shouldUpdateRef = useRef<OnShouldUpdate | null>(null);
   const warnedRef = useRef<boolean>(false);
   const refVar = useRef<T>(null);
   let ref = useRef<T | null>(refVar?.current);
   ref = refOpt || ref;
+  const breakpointsString = breakpoints ? JSON.stringify(breakpoints) : "";
 
   useEffect(() => {
     if (onResize) onResizeRef.current = onResize;
   }, [onResize]);
+
+  useEffect(() => {
+    if (customSetState) {
+      shouldUpdateRef.current = customSetState;
+      return;
+    }
+    if (breakpointsString) {
+      shouldUpdateRef.current = (prev, next) =>
+        prev.currentBreakpoint !== next.currentBreakpoint;
+    }
+  }, [customSetState, breakpointsString]);
 
   const observe = useCallback(
     (element?: T) => {
@@ -145,11 +168,20 @@ const useDimensions = <T extends HTMLElement>({
         onResizeRef.current(e);
       }
 
-      setState({
+      const next = {
         currentBreakpoint: e.currentBreakpoint,
         width,
         height,
         entry,
+      };
+      setState((s) => {
+        if (!shouldUpdateRef.current) {
+          return next;
+        }
+        if (!shouldUpdateRef.current(s, next)) {
+          return s;
+        }
+        return next;
       });
     });
 
@@ -159,7 +191,13 @@ const useDimensions = <T extends HTMLElement>({
       unobserve();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(breakpoints), useBorderBoxSize, observe, unobserve]);
+  }, [
+    breakpointsString,
+    useBorderBoxSize,
+    observe,
+    unobserve,
+    onlyUpdateOnBreakpointChange,
+  ]);
 
   return { ref, ...state, observe, unobserve };
 };

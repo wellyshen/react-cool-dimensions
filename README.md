@@ -88,6 +88,7 @@ const Card = () => {
     // The "currentBreakpoint" will be the object key based on the target's width
     // for instance, 0px - 319px (currentBreakpoint = XS), 320px - 479px (currentBreakpoint = SM) and so on
     breakpoints: { XS: 0, SM: 320, MD: 480, LG: 640 },
+    onlyUpdateOnBreakpointChange: true, // optional, will only trigger state-change on breakpoint-change
     onResize: ({ currentBreakpoint }) => {
       // Now the event callback will be triggered when breakpoint is changed
       // we can also access the "currentBreakpoint" here
@@ -105,6 +106,16 @@ const Card = () => {
 ```
 
 > Note: If the `breakpoints` option isn't set or there's no the defined breakpoint (object key) for a range of width. The `currentBreakpoint` will be empty string;
+
+If you only wish for updates to trigger if a breakpoint has changed, you may set the option `onlyUpdateOnBreakpointChange` to true.
+
+## Conditionally updating state
+
+You may wish to update state only conditionally, for instance if only the width hash changed beyond for intance 50px, you may use the `customSetState`-option. It receives two arguments, the previous state, and the next state.
+
+If you return the previous-state directly, no state-change is set.
+
+This may be used to reduce unwanted rerenders.
 
 ## Border-box Size Measurement
 
@@ -233,7 +244,7 @@ It's returned with the following properties.
 | `currentBreakpoint` | string   |         | Indicates the current breakpoint of the [responsive components](#responsive-components).                               |
 | `entry`             | object   |         | The [ResizeObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry) of the target element. |
 | `unobserve`         | function |         | To stop observing the target element.                                                                                  |
-| `observe`           | function |         | To [lazily start](#conditional-component) or re-start observing the target element once it's stopped observing.            |
+| `observe`           | function |         | To [lazily start](#conditional-component) or re-start observing the target element once it's stopped observing.        |
 
 ### Parameter
 
