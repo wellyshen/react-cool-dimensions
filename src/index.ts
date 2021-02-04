@@ -27,9 +27,9 @@ export interface Options<T> {
   ref?: RefObject<T>;
   useBorderBoxSize?: boolean;
   breakpoints?: Breakpoints;
-  onResize?: OnResize<T>;
+  updateOnBreakpointChange?: boolean;
   shouldUpdate?: OnShouldUpdate;
-  onlyUpdateOnBreakpointChange?: boolean;
+  onResize?: OnResize<T>;
   polyfill?: any;
 }
 interface Return<T> extends Omit<Event<T>, "entry"> {
@@ -60,7 +60,7 @@ const useDimensions = <T extends HTMLElement>({
   onResize,
   polyfill,
   shouldUpdate,
-  onlyUpdateOnBreakpointChange,
+  updateOnBreakpointChange,
 }: Options<T> = {}): Return<T> => {
   const [state, setState] = useState<State>({
     currentBreakpoint: "",
@@ -189,7 +189,7 @@ const useDimensions = <T extends HTMLElement>({
     useBorderBoxSize,
     observe,
     unobserve,
-    onlyUpdateOnBreakpointChange,
+    updateOnBreakpointChange,
   ]);
 
   return { ref, ...state, observe, unobserve };

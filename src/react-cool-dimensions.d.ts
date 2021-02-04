@@ -43,12 +43,9 @@ declare module "react-cool-dimensions" {
     ref?: RefObject<T>;
     useBorderBoxSize?: boolean;
     breakpoints?: Record<string, number>;
-    onResize?: OnResize<T>;
-    /** If set, it will only update the state when a breakpoint is changed. */
-    onlyUpdateOnBreakpointChange?: boolean;
-    /** If you wish to conditionally update the internal state, for instance to
-     * reduce rerenders conditionally, you may use this custom-functionality */
+    updateOnBreakpointChange?: boolean;
     shouldUpdate?: OnShouldUpdate;
+    onResize?: OnResize<T>;
     polyfill?: any;
   }
 

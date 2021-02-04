@@ -80,6 +80,8 @@ We have [media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Q
 
 No worries, `react-cool-dimensions` provides an alternative solution for us! We can activate the **responsive mode** by the `breakpoints` option. It's a width-based solution, once it's activated we can easily apply different styles to a component according to the `currentBreakpoint` state. The overall concept as below.
 
+If you wish to update the component only when a breakpoint has changed, you may set the option `onlyUpdateOnBreakpointChange` to true.
+
 ```js
 import useDimensions from "react-cool-dimensions";
 
@@ -88,7 +90,7 @@ const Card = () => {
     // The "currentBreakpoint" will be the object key based on the target's width
     // for instance, 0px - 319px (currentBreakpoint = XS), 320px - 479px (currentBreakpoint = SM) and so on
     breakpoints: { XS: 0, SM: 320, MD: 480, LG: 640 },
-    onlyUpdateOnBreakpointChange: true, // optional, will only trigger state-change on breakpoint-change
+    onlyUpdateOnBreakpointChange: true, // Optional, will only trigger state-change on breakpoint-change
     onResize: ({ currentBreakpoint }) => {
       // Now the event callback will be triggered when breakpoint is changed
       // we can also access the "currentBreakpoint" here
@@ -105,11 +107,9 @@ const Card = () => {
 };
 ```
 
-> Note: If the `breakpoints` option isn't set or there's no the defined breakpoint (object key) for a range of width. The `currentBreakpoint` will be empty string;
+> Note: If the `breakpoints` option isn't set or there's no the defined breakpoint (object key) for a range of width. The `currentBreakpoint` will be empty string.
 
-If you only wish for updates to trigger if a breakpoint has changed, you may set the option `onlyUpdateOnBreakpointChange` to true.
-
-## Conditionally updating state
+## Conditionally Updating State
 
 You may wish to update state only conditionally, for instance if only the width hash changed beyond for intance 50px, you may use the `customSetState`-option. It receives two arguments, the previous state, and the next state.
 
@@ -255,6 +255,7 @@ The `options` provides the following configurations and event callback for you.
 | `ref`              | object         |         | For [some reasons](#use-your-own-ref), you can pass in your own `ref` instead of using the built-in.                                                                                          |
 | `breakpoints`      | object         |         | Activates the responsive mode for [responsive components](#responsive-components) or [performance optimization](#performance-optimization).                                                   |
 | `useBorderBoxSize` | boolean        | `false` | Tells the hook to [measure the target element based on the border-box size](#border-box-size-measurement).                                                                                    |
+| `shouldUpdate`     | function       |         | A function returns a `boolean` to tell `react-cool-dimensions` whether the component should be re-rendered or not.                                                                            |
 | `onResize`         | function       |         | It's invoked whenever the size of the target element is changed. But in [responsive mode](#responsive-components), it's invoked based on the changing of the breakpoint rather than the size. |
 | `polyfill`         | ResizeObserver |         | It's used for [injecting a polyfill](#resizeobserver-polyfill).                                                                                                                               |
 
