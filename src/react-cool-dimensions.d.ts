@@ -35,7 +35,7 @@ declare module "react-cool-dimensions" {
     (event: Event<T>): void;
   }
 
-  interface onShouldUpdate {
+  interface OnShouldUpdate {
     (previous: State, next: State): boolean;
   }
 
@@ -48,7 +48,7 @@ declare module "react-cool-dimensions" {
     onlyUpdateOnBreakpointChange?: boolean;
     /** If you wish to conditionally update the internal state, for instance to
      * reduce rerenders conditionally, you may use this custom-functionality */
-    customSetState?: SetState;
+    shouldUpdate?: OnShouldUpdate;
     polyfill?: any;
   }
 

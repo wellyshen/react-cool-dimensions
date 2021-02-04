@@ -19,7 +19,7 @@ interface Event<T> extends State {
 interface OnResize<T> {
   (event: Event<T>): void;
 }
-interface onShouldUpdate {
+interface OnShouldUpdate {
   (previous: State, next: State): boolean;
 }
 type Breakpoints = { [key: string]: number };
@@ -32,7 +32,7 @@ export interface Options<T> {
   onlyUpdateOnBreakpointChange?: boolean;
   /** If you wish to conditionally update the internal state, for instance to
    * reduce rerenders conditionally, you may use this custom-functionality */
-  shouldUpdate?: onShouldUpdate;
+  shouldUpdate?: OnShouldUpdate;
   polyfill?: any;
 }
 interface Return<T> extends Omit<Event<T>, "entry"> {
@@ -74,7 +74,7 @@ const useDimensions = <T extends HTMLElement>({
   const prevBreakpointRef = useRef<string>();
   const observerRef = useRef<ResizeObserver | null>(null);
   const onResizeRef = useRef<OnResize<T> | null>(null);
-  const shouldUpdateRef = useRef<onShouldUpdate | null>(null);
+  const shouldUpdateRef = useRef<OnShouldUpdate | null>(null);
   const warnedRef = useRef<boolean>(false);
   const refVar = useRef<T>(null);
   let ref = useRef<T | null>(refVar?.current);
