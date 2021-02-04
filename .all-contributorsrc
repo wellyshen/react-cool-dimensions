@@ -15,6 +15,17 @@
         "doc",
         "maintenance"
       ]
+    },
+    {
+      "login": "runar-rkmedia",
+      "name": "Runar Kristoffersen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5629981?v=4",
+      "profile": "http://www.runarkristoffersen.com",
+      "contributions": [
+        "doc",
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
