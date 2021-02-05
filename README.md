@@ -30,7 +30,7 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 - 🔩 Supports custom `refs` for [some reasons](#use-your-own-ref).
 - 📜 Supports [TypeScript](https://www.typescriptlang.org) type definition.
 - 🗄️ Server-side rendering compatibility.
-- 🦠 Tiny size ([~ 1KB gzipped](https://bundlephobia.com/result?p=react-cool-dimensions)). No external dependencies, aside for the `react`.
+- 🦠 Tiny size ([~ 1.1KB gzipped](https://bundlephobia.com/result?p=react-cool-dimensions)). No external dependencies, aside for the `react`.
 
 ## Requirement
 
@@ -80,7 +80,7 @@ We have [media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Q
 
 No worries, `react-cool-dimensions` provides an alternative solution for us! We can activate the **responsive mode** by the `breakpoints` option. It's a width-based solution, once it's activated we can easily apply different styles to a component according to the `currentBreakpoint` state. The overall concept as below.
 
-If you wish to update the component only when a breakpoint has changed, you may set the option `onlyUpdateOnBreakpointChange` to true.
+If you wish to update the state on the breakpoints changed, you can set the `updateOnBreakpointChange` option to `true`.
 
 ```js
 import useDimensions from "react-cool-dimensions";
@@ -90,7 +90,8 @@ const Card = () => {
     // The "currentBreakpoint" will be the object key based on the target's width
     // for instance, 0px - 319px (currentBreakpoint = XS), 320px - 479px (currentBreakpoint = SM) and so on
     breakpoints: { XS: 0, SM: 320, MD: 480, LG: 640 },
-    onlyUpdateOnBreakpointChange: true, // Optional, will only trigger state-change on breakpoint-change
+    // Will only update the state on breakpoint changed, default is false
+    updateOnBreakpointChange: true,
     onResize: ({ currentBreakpoint }) => {
       // Now the event callback will be triggered when breakpoint is changed
       // we can also access the "currentBreakpoint" here
@@ -111,11 +112,14 @@ const Card = () => {
 
 ## Conditionally Updating State
 
-You may wish to update state only conditionally, for instance if only the width hash changed beyond for intance 50px, you may use the `customSetState`-option. It receives two arguments, the previous state, and the next state.
+You can use the `shouldUpdate` option to conditionally update the state to reduce unnecessary re-renders as below.
 
-If you return the previous-state directly, no state-change is set.
-
-This may be used to reduce unwanted rerenders.
+```js
+const returnObj = useDimensions({
+  // Will only update the state when the target element's width greater than 300px
+  shouldUpdate: (state) => state.width > 300,
+});
+```
 
 ## Border-box Size Measurement
 
@@ -250,14 +254,15 @@ It's returned with the following properties.
 
 The `options` provides the following configurations and event callback for you.
 
-| Key                | Type           | Default | Description                                                                                                                                                                                   |
-| ------------------ | -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ref`              | object         |         | For [some reasons](#use-your-own-ref), you can pass in your own `ref` instead of using the built-in.                                                                                          |
-| `breakpoints`      | object         |         | Activates the responsive mode for [responsive components](#responsive-components) or [performance optimization](#performance-optimization).                                                   |
-| `useBorderBoxSize` | boolean        | `false` | Tells the hook to [measure the target element based on the border-box size](#border-box-size-measurement).                                                                                    |
-| `shouldUpdate`     | function       |         | A function returns a `boolean` to tell `react-cool-dimensions` whether the component should be re-rendered or not.                                                                            |
-| `onResize`         | function       |         | It's invoked whenever the size of the target element is changed. But in [responsive mode](#responsive-components), it's invoked based on the changing of the breakpoint rather than the size. |
-| `polyfill`         | ResizeObserver |         | It's used for [injecting a polyfill](#resizeobserver-polyfill).                                                                                                                               |
+| Key                        | Type           | Default | Description                                                                                                                                                                                   |
+| -------------------------- | -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ref`                      | object         |         | For [some reasons](#use-your-own-ref), you can pass in your own `ref` instead of using the built-in.                                                                                          |
+| `breakpoints`              | object         |         | Activates the responsive mode for [responsive components](#responsive-components) or [performance optimization](#performance-optimization).                                                   |
+| `updateOnBreakpointChange` | boolean        | `false` | Tells the hook to update the state on breakpoint changed.                                                                                                                                     |
+| `useBorderBoxSize`         | boolean        | `false` | Tells the hook to [measure the target element based on the border-box size](#border-box-size-measurement).                                                                                    |
+| `shouldUpdate`             | function       |         | Tells the hook to [conditionally update the state](#conditionally-updating-state).                                                                                                            |
+| `onResize`                 | function       |         | It's invoked whenever the size of the target element is changed. But in [responsive mode](#responsive-components), it's invoked based on the changing of the breakpoint rather than the size. |
+| `polyfill`                 | ResizeObserver |         | It's used for [injecting a polyfill](#resizeobserver-polyfill).                                                                                                                               |
 
 ## ResizeObserver Polyfill
 
