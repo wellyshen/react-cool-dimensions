@@ -116,10 +116,14 @@ You can use the `shouldUpdate` option to conditionally update the state to reduc
 
 ```js
 const returnObj = useDimensions({
-  // Will only update the state when the target element's width greater than 300px
-  shouldUpdate: (state) => state.width > 300,
+  shouldUpdate: ({ currentBreakpoint, width, height, entry }) => {
+    // Will only update the state when the target element's width greater than 300px
+    return state.width > 300;
+  },
 });
 ```
+
+> Note: `updateOnBreakpointChange` and `shouldUpdate` can't be used at the same time, `shouldUpdate` has a higher priority.
 
 ## Border-box Size Measurement
 
