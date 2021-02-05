@@ -1,6 +1,6 @@
 {
   "name": "react-cool-dimensions",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "React hook to measure an element's size and handle responsive components.",
   "license": "MIT",
   "homepage": "https://react-cool-dimensions.netlify.app",
