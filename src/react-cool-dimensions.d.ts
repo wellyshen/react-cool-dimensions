@@ -35,8 +35,8 @@ declare module "react-cool-dimensions" {
     (event: Event<T>): void;
   }
 
-  interface OnShouldUpdate {
-    (prevState: State, nextState: State): boolean;
+  export interface ShouldUpdate {
+    (state: State): boolean;
   }
 
   export interface Options<T> {
@@ -44,7 +44,7 @@ declare module "react-cool-dimensions" {
     useBorderBoxSize?: boolean;
     breakpoints?: Record<string, number>;
     updateOnBreakpointChange?: boolean;
-    shouldUpdate?: OnShouldUpdate;
+    shouldUpdate?: ShouldUpdate;
     onResize?: OnResize<T>;
     polyfill?: any;
   }
