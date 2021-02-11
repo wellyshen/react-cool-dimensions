@@ -243,6 +243,7 @@ describe("useDimensions", () => {
 
     renderHelper();
     expect(console.error).toHaveBeenCalledTimes(1);
+    expect(console.error).toHaveBeenCalledWith(observerErr);
 
     // @ts-expect-error
     global.ResizeObserver = mockResizeObserver;
@@ -250,8 +251,6 @@ describe("useDimensions", () => {
     delete global.ResizeObserverEntry;
     renderHelper();
     expect(console.error).toHaveBeenCalledTimes(2);
-
-    expect(console.error).toHaveBeenCalledWith(observerErr);
   });
 
   it("should use polyfill", () => {
