@@ -38,7 +38,6 @@ describe("useDimensions", () => {
   beforeAll(() => {
     // @ts-expect-error
     global.ResizeObserver = mockResizeObserver;
-    // @ts-expect-error
     global.ResizeObserverEntry = jest.fn();
   });
 
