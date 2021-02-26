@@ -55,9 +55,9 @@ const getCurrentBreakpoint = (bps: Breakpoints, w: number): string => {
 
 const useDimensions = <T extends HTMLElement>({
   ref: refOpt,
-  useBorderBoxSize = false,
+  useBorderBoxSize,
   breakpoints,
-  updateOnBreakpointChange = false,
+  updateOnBreakpointChange,
   shouldUpdate,
   onResize,
   polyfill,
@@ -109,19 +109,18 @@ const useDimensions = <T extends HTMLElement>({
     }
 
     // eslint-disable-next-line compat/compat
-    observerRef.current = new (window.ResizeObserver || polyfill)(
+    observerRef.current = new (polyfill || window.ResizeObserver)(
       ([entry]: any) => {
         const { contentBoxSize, borderBoxSize, contentRect } = entry;
 
         let boxSize = contentBoxSize;
-        if (useBorderBoxSize) {
+        if (useBorderBoxSize)
           if (borderBoxSize) {
             boxSize = borderBoxSize;
           } else if (!warnedRef.current) {
             console.warn(borderBoxWarn);
             warnedRef.current = true;
           }
-        }
         // @juggle/resize-observer polyfill has different data structure
         boxSize = Array.isArray(boxSize) ? boxSize[0] : boxSize;
 
