@@ -28,7 +28,7 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 - 🎛 Super flexible [API](#api) design to cover most cases for you.
 - 🙈 Supports [conditional component](#conditional-component).
 - 🔩 Supports custom `refs` for [some reasons](#use-your-own-ref).
-- 📜 Supports [TypeScript](https://www.typescriptlang.org) type definition.
+- 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🗄️ Server-side rendering compatibility.
 - 🦠 Tiny size ([~ 1.2KB gzipped](https://bundlephobia.com/result?p=react-cool-dimensions)). No external dependencies, aside for the `react`.
 
@@ -232,6 +232,20 @@ const { ref, width, height } = useDimensions({
     // Triggered once per every 500 milliseconds
   }, 500),
 });
+```
+
+## Working in TypeScript
+
+This hook supports [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of element you are going to observe via the [generic type](https://www.typescriptlang.org/docs/handbook/generics.html):
+
+```ts
+import useInView from "react-cool-dimensions";
+
+const App = () => {
+  const { ref } = useDimensions<HTMLDivElement>();
+
+  return <div ref={ref} />;
+};
 ```
 
 ## API
