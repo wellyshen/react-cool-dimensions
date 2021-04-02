@@ -15,7 +15,7 @@ declare module "react-cool-dimensions" {
   }
 
   // Hook types
-  export interface Event<T extends HTMLElement = HTMLElement> {
+  export interface Event<T extends HTMLElement | null = HTMLElement> {
     currentBreakpoint: string;
     width: number;
     height: number;
@@ -31,7 +31,7 @@ declare module "react-cool-dimensions" {
     entry?: ResizeObserverEntry;
   }
 
-  export interface OnResize<T extends HTMLElement = HTMLElement> {
+  export interface OnResize<T extends HTMLElement | null = HTMLElement> {
     (event: Event<T>): void;
   }
 
@@ -39,7 +39,7 @@ declare module "react-cool-dimensions" {
     (state: State): boolean;
   }
 
-  export interface Options<T> {
+  export interface Options<T extends HTMLElement | null = HTMLElement> {
     ref?: RefObject<T>;
     useBorderBoxSize?: boolean;
     breakpoints?: Record<string, number>;
@@ -49,12 +49,13 @@ declare module "react-cool-dimensions" {
     polyfill?: any;
   }
 
-  interface Return<T> extends Omit<Event<T>, "entry"> {
+  interface Return<T extends HTMLElement | null>
+    extends Omit<Event<T>, "entry"> {
     ref: RefObject<T>;
     entry?: ResizeObserverEntry;
   }
 
-  function useDimensions<T extends HTMLElement | null = HTMLElement>(
+  function useDimensions<T extends HTMLElement | null | null = HTMLElement>(
     options?: Options<T>
   ): Return<T>;
 
