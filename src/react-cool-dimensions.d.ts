@@ -54,7 +54,7 @@ declare module "react-cool-dimensions" {
     entry?: ResizeObserverEntry;
   }
 
-  function useDimensions<T extends HTMLElement = HTMLElement>(
+  function useDimensions<T extends HTMLElement | null = HTMLElement>(
     options?: Options<T>
   ): Return<T>;
 

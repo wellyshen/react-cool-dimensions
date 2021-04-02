@@ -53,7 +53,7 @@ const getCurrentBreakpoint = (bps: Breakpoints, w: number): string => {
   return curBp;
 };
 
-const useDimensions = <T extends HTMLElement>({
+const useDimensions = <T extends HTMLElement | null>({
   ref: refOpt,
   useBorderBoxSize,
   breakpoints,
