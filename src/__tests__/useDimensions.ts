@@ -31,9 +31,7 @@ describe("useDimensions", () => {
     callback([e]);
   };
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => jest.clearAllMocks());
 
   beforeAll(() => {
     // @ts-expect-error
