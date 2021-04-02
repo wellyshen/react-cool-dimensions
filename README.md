@@ -170,7 +170,7 @@ import useDimensions from "react-cool-dimensions";
 
 const App = () => {
   const [show, setShow] = useState(false);
-  const { width, height, observe } = useDimensions();
+  const { observe, width, height } = useDimensions();
 
   return (
     <>
@@ -243,10 +243,18 @@ This hook supports [TypeScript](https://www.typescriptlang.org), you can tell th
 ```ts
 import useInView from "react-cool-dimensions";
 
+// Use `ref` method
 const App = () => {
   const { ref } = useDimensions<HTMLDivElement>();
 
   return <div ref={ref} />;
+};
+
+// Use `observe` method
+const App = () => {
+  const { observe } = useDimensions<HTMLDivElement | null>();
+
+  return <div ref={observe} />;
 };
 ```
 
