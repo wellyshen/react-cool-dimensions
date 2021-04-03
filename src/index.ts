@@ -99,7 +99,6 @@ const useDimensions = <T extends HTMLElement | null>({
   }, []);
 
   useEffect(() => {
-    if (!ref.current) return () => null;
     if (
       (!("ResizeObserver" in window) || !("ResizeObserverEntry" in window)) &&
       !polyfill
