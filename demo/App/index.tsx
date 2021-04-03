@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useRef } from "react";
 import { Global, css } from "@emotion/react";
 import normalize from "normalize.css";
 
@@ -20,13 +20,14 @@ const App: FC = () => {
     h: 300,
   });
   const {
-    ref,
+    observe,
     currentBreakpoint,
     width,
     height,
-  } = useDimensions<HTMLDivElement>({
+  } = useDimensions<HTMLDivElement | null>({
     breakpoints: { XS: 0, SM: 100, MD: 200, LG: 300, XL: 400 },
   });
+  const ref = useRef<HTMLDivElement | null>();
 
   const resize = (x: number, y: number) => {
     if (!ref.current) return;
@@ -83,7 +84,10 @@ const App: FC = () => {
         <div
           css={frame}
           style={{ width: `${size.w}px`, height: `${size.h}px` }}
-          ref={ref}
+          ref={(el) => {
+            observe(el);
+            ref.current = el;
+          }}
         >
           <div css={bp}>{currentBreakpoint}</div>
           <div>
