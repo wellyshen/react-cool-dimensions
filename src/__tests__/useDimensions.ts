@@ -3,12 +3,9 @@ import { renderHook, act } from "@testing-library/react-hooks";
 import useDimensions, { Options, observerErr, borderBoxWarn } from "..";
 
 describe("useDimensions", () => {
-  const target = { current: document.createElement("div") };
-  const renderHelper = ({
-    ref = target,
-    ...rest
-  }: Options<HTMLDivElement> = {}) =>
-    renderHook(() => useDimensions({ ref, ...rest }));
+  const target = document.createElement("div");
+  const renderHelper = (args: Options<HTMLDivElement> = {}) =>
+    renderHook(() => useDimensions(args));
 
   interface Event {
     borderBoxSize?: { blockSize: number; inlineSize: number };
@@ -39,10 +36,21 @@ describe("useDimensions", () => {
     global.ResizeObserverEntry = jest.fn();
   });
 
-  it("should not start observe if the target isn't set", () => {
-    // @ts-expect-error
-    renderHelper({ ref: null });
+  it("should not start observe if target isn't set", () => {
+    const { result } = renderHelper();
     expect(observe).not.toHaveBeenCalled();
+
+    result.current.observe();
+    expect(observe).not.toHaveBeenCalled();
+  });
+
+  it("should return workable observe method", () => {
+    const { result } = renderHelper();
+    result.current.observe(target);
+    expect(observe).toHaveBeenCalledTimes(1);
+
+    result.current.observe();
+    expect(observe).toHaveBeenCalledTimes(2);
   });
 
   it("should return workable unobserve method", () => {
@@ -51,24 +59,10 @@ describe("useDimensions", () => {
     expect(disconnect).toHaveBeenCalledTimes(1);
   });
 
-  it("should return workable observe method", () => {
-    const { result } = renderHelper();
-    result.current.unobserve();
-    result.current.observe();
-    expect(observe).toHaveBeenCalledTimes(2);
-  });
-
-  it("should return workable ref", () => {
-    // @ts-expect-error
-    const { result } = renderHelper({ ref: null });
-    expect(result.current.ref).toStrictEqual({ current: null });
-
-    result.current.ref = target;
-    expect(result.current.ref).toStrictEqual(target);
-  });
-
   it("should return width and height correctly", () => {
     const { result } = renderHelper();
+    result.current.observe(target);
+
     expect(result.current.width).toBe(0);
     expect(result.current.height).toBe(0);
 
@@ -86,6 +80,7 @@ describe("useDimensions", () => {
   it("should use border-box size", () => {
     console.warn = jest.fn();
     let { result } = renderHelper({ useBorderBoxSize: true });
+    result.current.observe(target);
     const contentBoxSize = { blockSize: 100, inlineSize: 100 };
     act(() => {
       triggerObserverCb({ contentBoxSize });
@@ -98,6 +93,7 @@ describe("useDimensions", () => {
 
     console.warn = jest.fn();
     result = renderHelper({ useBorderBoxSize: true }).result;
+    result.current.observe(target);
     const borderBoxSize = { blockSize: 110, inlineSize: 110 };
     act(() => triggerObserverCb({ contentBoxSize, borderBoxSize }));
     expect(console.warn).not.toHaveBeenCalledWith(borderBoxWarn);
@@ -107,15 +103,18 @@ describe("useDimensions", () => {
 
   it("should return currentBreakpoint correctly", () => {
     let { result } = renderHelper();
+    result.current.observe(target);
     expect(result.current.currentBreakpoint).toBe("");
 
     result = renderHelper({ breakpoints: { T1: 100 } }).result;
+    result.current.observe(target);
     act(() => triggerObserverCb({ contentRect: { width: 0 } }));
     expect(result.current.currentBreakpoint).toBe("");
     act(() => triggerObserverCb({ contentRect: { width: 99 } }));
     expect(result.current.currentBreakpoint).toBe("");
 
     result = renderHelper({ breakpoints: { T0: 0, T1: 100 } }).result;
+    result.current.observe(target);
     act(() => triggerObserverCb({ contentRect: { width: 0 } }));
     expect(result.current.currentBreakpoint).toBe("T0");
     act(() => triggerObserverCb({ contentRect: { width: 99 } }));
@@ -129,11 +128,12 @@ describe("useDimensions", () => {
 
   it("should return entry correctly", () => {
     const { result } = renderHelper();
+    result.current.observe(target);
     expect(result.current.entry).toBeUndefined();
 
     const e = { contentRect: { width: 100, height: 100 } };
     act(() => triggerObserverCb(e));
-    expect(result.current.entry).toStrictEqual(e);
+    expect(result.current.entry).toEqual(e);
   });
 
   it("should stop observe when un-mount", () => {
@@ -147,7 +147,8 @@ describe("useDimensions", () => {
       e.unobserve();
       e.observe();
     });
-    renderHelper({ onResize });
+    const { result } = renderHelper({ onResize });
+    result.current.observe(target);
     const contentRect = { width: 100, height: 100 };
     act(() => triggerObserverCb({ contentRect }));
     expect(onResize).toHaveBeenCalledWith({
@@ -167,7 +168,11 @@ describe("useDimensions", () => {
       e.unobserve();
       e.observe();
     });
-    renderHelper({ breakpoints: { T0: 0, T1: 100 }, onResize });
+    const { result } = renderHelper({
+      breakpoints: { T0: 0, T1: 100 },
+      onResize,
+    });
+    result.current.observe(target);
     const contentRect = { width: 50, height: 100 };
     act(() => {
       triggerObserverCb({ contentRect });
@@ -191,6 +196,7 @@ describe("useDimensions", () => {
       breakpoints: { T0: 100, T1: 200 },
       updateOnBreakpointChange: true,
     });
+    result.current.observe(target);
     act(() => triggerObserverCb({ contentRect: { width: 50 } }));
     expect(result.current.width).toBe(0);
     act(() => triggerObserverCb({ contentRect: { width: 100 } }));
@@ -201,6 +207,7 @@ describe("useDimensions", () => {
     const { result } = renderHelper({
       shouldUpdate: ({ width }) => width > 300,
     });
+    result.current.observe(target);
     act(() => triggerObserverCb({ contentRect: { width: 100 } }));
     expect(result.current.width).toBe(0);
     act(() => triggerObserverCb({ contentRect: { width: 400 } }));
@@ -213,6 +220,7 @@ describe("useDimensions", () => {
     let { result } = renderHelper({
       updateOnBreakpointChange: true,
     });
+    result.current.observe(target);
     act(() => triggerObserverCb({ contentRect: { width: 50 } }));
     expect(result.current.width).toBe(50);
 
@@ -221,6 +229,7 @@ describe("useDimensions", () => {
       updateOnBreakpointChange: true,
       shouldUpdate: ({ width }) => width > 300,
     }).result;
+    result.current.observe(target);
     act(() => triggerObserverCb({ contentRect: { width: 100 } }));
     expect(result.current.width).toBe(0);
     act(() => triggerObserverCb({ contentRect: { width: 400 } }));
@@ -255,7 +264,8 @@ describe("useDimensions", () => {
     delete global.ResizeObserver;
     // @ts-expect-error
     delete global.ResizeObserverEntry;
-    renderHelper({ polyfill: mockResizeObserver });
+    const { result } = renderHelper({ polyfill: mockResizeObserver });
+    result.current.observe(target);
     expect(observe).toHaveBeenCalledTimes(1);
   });
 });

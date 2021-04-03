@@ -1,4 +1,4 @@
-import { RefObject, useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 export const observerErr =
   "💡 react-cool-dimensions: the browser doesn't support Resize Observer, please use polyfill: https://github.com/wellyshen/react-cool-dimensions#resizeobserver-polyfill";
@@ -24,7 +24,6 @@ interface ShouldUpdate {
 }
 type Breakpoints = Record<string, number>;
 export interface Options<T> {
-  ref?: RefObject<T>;
   useBorderBoxSize?: boolean;
   breakpoints?: Breakpoints;
   updateOnBreakpointChange?: boolean;
@@ -33,7 +32,6 @@ export interface Options<T> {
   polyfill?: any;
 }
 interface Return<T> extends Omit<Event<T>, "entry"> {
-  ref: RefObject<T>;
   entry?: ResizeObserverEntry;
 }
 
@@ -54,7 +52,6 @@ const getCurrentBreakpoint = (bps: Breakpoints, w: number): string => {
 };
 
 const useDimensions = <T extends HTMLElement | null>({
-  ref: refOpt,
   useBorderBoxSize,
   breakpoints,
   updateOnBreakpointChange,
@@ -73,9 +70,7 @@ const useDimensions = <T extends HTMLElement | null>({
   const onResizeRef = useRef<OnResize<T> | null>(null);
   const shouldUpdateRef = useRef<ShouldUpdate | null>(null);
   const warnedRef = useRef<boolean>(false);
-  const refVar = useRef<T>(null);
-  let ref = useRef<T | null>(refVar?.current);
-  ref = refOpt || ref;
+  const ref = useRef<T>();
 
   useEffect(() => {
     if (onResize) onResizeRef.current = onResize;
@@ -85,14 +80,11 @@ const useDimensions = <T extends HTMLElement | null>({
     if (shouldUpdate) shouldUpdateRef.current = shouldUpdate;
   }, [shouldUpdate]);
 
-  const observe = useCallback(
-    (element?: T) => {
-      if (element) ref.current = element;
-      if (observerRef.current && ref.current)
-        observerRef.current.observe(ref.current as HTMLElement);
-    },
-    [ref]
-  );
+  const observe = useCallback((element?: T) => {
+    if (element) ref.current = element;
+    if (observerRef.current && ref.current)
+      observerRef.current.observe(ref.current as HTMLElement);
+  }, []);
 
   const unobserve = useCallback(() => {
     if (observerRef.current) observerRef.current.disconnect();
@@ -191,7 +183,7 @@ const useDimensions = <T extends HTMLElement | null>({
     updateOnBreakpointChange,
   ]);
 
-  return { ref, ...state, observe, unobserve };
+  return { ...state, observe, unobserve };
 };
 
 export default useDimensions;

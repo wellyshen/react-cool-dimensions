@@ -28,11 +28,9 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 - 🍰 Easy to handle [responsive components](#responsive-components), provides an alternative solution to the [container queries](https://wicg.github.io/container-queries) problem.
 - 📦 Supports [border-box size measurement](#border-box-size-measurement).
 - 🎛 Super flexible [API](#api) design to cover most cases for you.
-- 🙈 Supports [conditional component](#conditional-component).
-- 🔩 Supports custom `refs` for [some reasons](#use-your-own-ref).
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🗄️ Server-side rendering compatibility.
-- 🦠 Tiny size ([~ 1.1kB gzipped](https://bundlephobia.com/result?p=react-cool-dimensions)). No external dependencies, aside for the `react`.
+- 🦔 Tiny size ([~ 1kB gzipped](https://bundlephobia.com/result?p=react-cool-dimensions)). No external dependencies, aside for the `react`.
 
 ## Requirement
 
@@ -62,14 +60,17 @@ To report the size of an element by the `width` and `height` states.
 import useDimensions from "react-cool-dimensions";
 
 const App = () => {
-  const { ref, width, height, entry, unobserve, observe } = useDimensions({
-    onResize: ({ width, height, entry, unobserve, observe }) => {
-      // Triggered whenever the size of the target is changed
+  const { observe, unobserve, width, height, entry } = useDimensions({
+    onResize: ({ observe, unobserve, width, height, entry }) => {
+      // Triggered whenever the size of the target is changed...
+
+      unobserve(); // To stop observing the current target element
+      observe(); // To re-start observing the current target element
     },
   });
 
   return (
-    <div ref={ref}>
+    <div ref={observe}>
       Hi! My width is {width}px and height is {height}px
     </div>
   );
@@ -88,7 +89,7 @@ If you wish to update the state on the breakpoints changed, you can set the `upd
 import useDimensions from "react-cool-dimensions";
 
 const Card = () => {
-  const { ref, currentBreakpoint } = useDimensions({
+  const { observe, currentBreakpoint } = useDimensions({
     // The "currentBreakpoint" will be the object key based on the target's width
     // for instance, 0px - 319px (currentBreakpoint = XS), 320px - 479px (currentBreakpoint = SM) and so on
     breakpoints: { XS: 0, SM: 320, MD: 480, LG: 640 },
@@ -101,7 +102,7 @@ const Card = () => {
   });
 
   return (
-    <div class={`card ${currentBreakpoint}`} ref={ref}>
+    <div class={`card ${currentBreakpoint}`} ref={observe}>
       <div class="card-header">I'm 😎</div>
       <div class="card-body">I'm 👕</div>
       <div class="card-footer">I'm 👟</div>
@@ -136,7 +137,7 @@ import useDimensions from "react-cool-dimensions";
 import { ResizeObserver } from "@juggle/resize-observer";
 
 const App = () => {
-  const { ref, width, height } = useDimensions({
+  const { observe, width, height } = useDimensions({
     useBorderBoxSize: true, // Tell the hook to measure based on the border-box size, default is false
     polyfill: ResizeObserver, // Use polyfill to make this feature works on more browsers
   });
@@ -149,7 +150,7 @@ const App = () => {
         padding: "10px",
         border: "5px solid grey",
       }}
-      ref={ref}
+      ref={observe}
     >
       {/* Now the width and height will be: 100px + 10px + 5px = 115px */}
       Hi! My width is {width}px and height is {height}px
@@ -158,68 +159,27 @@ const App = () => {
 };
 ```
 
-## Conditional Component
+## How to Share the `ref`?
 
-There're two ways to use `react-cool-dimensions` with a conditional component.
-
-Option 1, we can lazily start observing via the `observe` method:
+You can share the `ref` as follows:
 
 ```js
-import { useState } from "react";
+import { useRef } from "react";
 import useDimensions from "react-cool-dimensions";
 
 const App = () => {
-  const [show, setShow] = useState(false);
-  const { observe, width, height } = useDimensions();
+  const ref = useRef();
+  const { observe } = useDimensions();
 
   return (
-    <>
-      <button onClick={() => setShow(!show)}>Toggle</button>
-      {show && (
-        <div ref={observe}>
-          Hi! My width is {width}px and height is {height}px
-        </div>
-      )}
-    </>
+    <div
+      ref={(el) => {
+        observe(el); // Set the target element for measuring
+        ref.current = el; // Share the element for other purposes
+      }}
+    />
   );
 };
-```
-
-Option 2, wrap the hook into the conditional component:
-
-```js
-import { useState } from "react";
-import useDimensions from "react-cool-dimensions";
-
-const MyComponent = () => {
-  const { ref, width, height } = useDimensions();
-
-  return (
-    <div ref={ref}>
-      Hi! My width is {width}px and height is {height}px
-    </div>
-  );
-};
-
-const App = () => {
-  const [show, setShow] = useState(false);
-
-  return (
-    <>
-      <button onClick={() => setShow(!show)}>Toggle</button>
-      {show && <MyComponent />}
-    </>
-  );
-};
-```
-
-## Use Your Own `ref`
-
-In case of you had a ref already or you want to share a ref for other purposes. You can pass in the ref instead of using the one provided by this hook.
-
-```js
-const ref = useRef();
-const { width, height } = useDimensions({ ref });
 ```
 
 ## Performance Optimization
@@ -229,7 +189,7 @@ The `onResize` event will be triggered whenever the size of the target element i
 ```js
 import _ from "lodash";
 
-const { ref, width, height } = useDimensions({
+const returnObj = useDimensions({
   onResize: _.throttle(() => {
     // Triggered once per every 500 milliseconds
   }, 500),
@@ -243,14 +203,6 @@ This hook supports [TypeScript](https://www.typescriptlang.org), you can tell th
 ```ts
 import useInView from "react-cool-dimensions";
 
-// Use `ref` method
-const App = () => {
-  const { ref } = useDimensions<HTMLDivElement>();
-
-  return <div ref={ref} />;
-};
-
-// Use `observe` method
 const App = () => {
   const { observe } = useDimensions<HTMLDivElement | null>();
 
@@ -270,13 +222,12 @@ It's returned with the following properties.
 
 | Key                 | Type     | Default | Description                                                                                                            |
 | ------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `ref`               | object   |         | Used to set the target element for measuring.                                                                          |
+| `observe`           | function |         | To set a target element for measuring or re-start observing the current target element.                                |
+| `unobserve`         | function |         | To stop observing the current target element.                                                                          |
 | `width`             | number   |         | The width of the target element in pixel.                                                                              |
 | `height`            | number   |         | The height of the target element in pixel.                                                                             |
 | `currentBreakpoint` | string   |         | Indicates the current breakpoint of the [responsive components](#responsive-components).                               |
 | `entry`             | object   |         | The [ResizeObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry) of the target element. |
-| `unobserve`         | function |         | To stop observing the target element.                                                                                  |
-| `observe`           | function |         | To [lazily start](#conditional-component) or re-start observing the target element once it's stopped observing.        |
 
 ### Parameter
 
@@ -284,7 +235,6 @@ The `options` provides the following configurations and event callback for you.
 
 | Key                        | Type           | Default | Description                                                                                                                                                                                   |
 | -------------------------- | -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ref`                      | object         |         | For [some reasons](#use-your-own-ref), you can pass in your own `ref` instead of using the built-in.                                                                                          |
 | `breakpoints`              | object         |         | Activates the responsive mode for [responsive components](#responsive-components) or [performance optimization](#performance-optimization).                                                   |
 | `updateOnBreakpointChange` | boolean        | `false` | Tells the hook to update the state on breakpoint changed.                                                                                                                                     |
 | `useBorderBoxSize`         | boolean        | `false` | Tells the hook to [measure the target element based on the border-box size](#border-box-size-measurement).                                                                                    |

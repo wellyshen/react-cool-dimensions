@@ -1,6 +1,4 @@
 declare module "react-cool-dimensions" {
-  import { RefObject } from "react";
-
   // Types from @types/resize-observer-browser
   interface ResizeObserverSize {
     inlineSize: number;
@@ -40,7 +38,6 @@ declare module "react-cool-dimensions" {
   }
 
   export interface Options<T extends HTMLElement | null = HTMLElement> {
-    ref?: RefObject<T>;
     useBorderBoxSize?: boolean;
     breakpoints?: Record<string, number>;
     updateOnBreakpointChange?: boolean;
@@ -51,11 +48,10 @@ declare module "react-cool-dimensions" {
 
   interface Return<T extends HTMLElement | null>
     extends Omit<Event<T>, "entry"> {
-    ref: RefObject<T>;
     entry?: ResizeObserverEntry;
   }
 
-  function useDimensions<T extends HTMLElement | null | null = HTMLElement>(
+  function useDimensions<T extends HTMLElement | null = HTMLElement>(
     options?: Options<T>
   ): Return<T>;
 
