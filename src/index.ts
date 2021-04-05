@@ -80,15 +80,21 @@ const useDimensions = <T extends HTMLElement | null>({
     if (shouldUpdate) shouldUpdateRef.current = shouldUpdate;
   }, [shouldUpdate]);
 
-  const observe = useCallback((element?: T) => {
-    if (element) ref.current = element;
-    if (observerRef.current && ref.current)
-      observerRef.current.observe(ref.current as HTMLElement);
-  }, []);
-
   const unobserve = useCallback(() => {
     if (observerRef.current) observerRef.current.disconnect();
   }, []);
+
+  const observe = useCallback(
+    (element?: T) => {
+      if (element) {
+        unobserve();
+        ref.current = element;
+      }
+      if (observerRef.current && ref.current)
+        observerRef.current.observe(ref.current as HTMLElement);
+    },
+    [unobserve]
+  );
 
   useEffect(() => {
     if (

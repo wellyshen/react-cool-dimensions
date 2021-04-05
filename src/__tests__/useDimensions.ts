@@ -47,6 +47,7 @@ describe("useDimensions", () => {
   it("should return workable observe method", () => {
     const { result } = renderHelper();
     result.current.observe(target);
+    expect(disconnect).toHaveBeenCalledTimes(1);
     expect(observe).toHaveBeenCalledTimes(1);
 
     result.current.observe();
@@ -143,10 +144,7 @@ describe("useDimensions", () => {
   });
 
   it("should trigger onResize without breakpoints", () => {
-    const onResize = jest.fn((e) => {
-      e.unobserve();
-      e.observe();
-    });
+    const onResize = jest.fn();
     const { result } = renderHelper({ onResize });
     result.current.observe(target);
     const contentRect = { width: 100, height: 100 };
@@ -159,15 +157,10 @@ describe("useDimensions", () => {
       observe: expect.any(Function),
       unobserve: expect.any(Function),
     });
-    expect(disconnect).toHaveBeenCalledTimes(1);
-    expect(observe).toHaveBeenCalledTimes(2);
   });
 
   it("should trigger onResize with breakpoints", () => {
-    const onResize = jest.fn((e) => {
-      e.unobserve();
-      e.observe();
-    });
+    const onResize = jest.fn();
     const { result } = renderHelper({
       breakpoints: { T0: 0, T1: 100 },
       onResize,
@@ -187,8 +180,6 @@ describe("useDimensions", () => {
       observe: expect.any(Function),
       unobserve: expect.any(Function),
     });
-    expect(disconnect).toHaveBeenCalledTimes(1);
-    expect(observe).toHaveBeenCalledTimes(2);
   });
 
   it("should update state on breakpoint changed", () => {
