@@ -287,6 +287,12 @@ You could use dynamic imports to only load the file when the polyfill is require
 })();
 ```
 
+## Articles / Blog Posts
+
+> 💡 If you have written any blog post or article about `react-cool-dimensions`, please open a PR to add it here.
+
+- Featured on [React Status #191](https://react.statuscode.com/issues/191).
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
