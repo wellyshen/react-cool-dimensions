@@ -28,7 +28,14 @@ describe("useDimensions", () => {
     callback([e]);
   };
 
-  beforeEach(() => jest.clearAllMocks());
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    jest.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
+  });
 
   beforeAll(() => {
     // @ts-expect-error
