@@ -30,7 +30,6 @@ describe("useDimensions", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-
     jest.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
       cb(0);
       return 0;

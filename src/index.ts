@@ -97,8 +97,6 @@ const useDimensions = <T extends HTMLElement | null>({
   );
 
   useEffect(() => {
-    let rafId: number | null = null;
-
     if (
       (!("ResizeObserver" in window) || !("ResizeObserverEntry" in window)) &&
       !polyfill
@@ -106,6 +104,8 @@ const useDimensions = <T extends HTMLElement | null>({
       console.error(observerErr);
       return () => null;
     }
+
+    let rafId: number | null = null;
 
     // eslint-disable-next-line compat/compat
     observerRef.current = new (polyfill || window.ResizeObserver)(
