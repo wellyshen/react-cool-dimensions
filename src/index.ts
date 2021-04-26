@@ -97,6 +97,8 @@ const useDimensions = <T extends HTMLElement | null>({
   );
 
   useEffect(() => {
+    let rafId: number | null = null;
+
     if (
       (!("ResizeObserver" in window) || !("ResizeObserverEntry" in window)) &&
       !polyfill
@@ -166,19 +168,26 @@ const useDimensions = <T extends HTMLElement | null>({
           breakpoints &&
           updateOnBreakpointChange
         ) {
-          setState((prev) =>
-            prev.currentBreakpoint !== next.currentBreakpoint ? next : prev
-          );
+          rafId = requestAnimationFrame(() => {
+            setState((prev) =>
+              prev.currentBreakpoint !== next.currentBreakpoint ? next : prev
+            );
+          });
           return;
         }
 
-        setState(next);
+        rafId = requestAnimationFrame(() => {
+          setState(next);
+        });
       }
     );
 
     observe();
 
-    return () => unobserve();
+    return () => {
+      unobserve();
+      if (rafId) cancelAnimationFrame(rafId);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // eslint-disable-next-line react-hooks/exhaustive-deps
