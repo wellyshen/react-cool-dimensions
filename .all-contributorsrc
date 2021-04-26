@@ -26,6 +26,15 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "rfgamaral",
+      "name": "Ricardo Amaral",
+      "avatar_url": "https://avatars.githubusercontent.com/u/96476?v=4",
+      "profile": "https://ricardoamaral.net",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
