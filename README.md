@@ -27,6 +27,7 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
 - 🍰 Easy to handle [responsive components](#responsive-components), provides an alternative solution to the [container queries](https://wicg.github.io/container-queries) problem.
 - 📦 Supports [border-box size measurement](#border-box-size-measurement).
+- 🕹 Supports [conditionally updating state](#conditionally-updating-state).
 - 🎛 Super flexible [API](#api) design to cover most cases for you.
 - 📜 Supports [TypeScript](#working-in-typescript) type definition.
 - 🗄️ Server-side rendering compatibility.
