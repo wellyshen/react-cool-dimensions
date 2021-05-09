@@ -205,7 +205,7 @@ This hook supports [TypeScript](https://www.typescriptlang.org), you can tell th
 import useInView from "react-cool-dimensions";
 
 const App = () => {
-  const { observe } = useDimensions<HTMLDivElement | null>();
+  const { observe } = useDimensions<HTMLDivElement>();
 
   return <div ref={observe} />;
 };

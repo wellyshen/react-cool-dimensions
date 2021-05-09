@@ -18,7 +18,7 @@ declare module "react-cool-dimensions" {
     width: number;
     height: number;
     entry: ResizeObserverEntry;
-    observe: (element?: T) => void;
+    observe: (element?: T | null) => void;
     unobserve: () => void;
   }
 

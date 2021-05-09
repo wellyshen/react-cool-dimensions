@@ -11,9 +11,12 @@ interface State {
   height: number;
   entry?: ResizeObserverEntry;
 }
+interface Observe<T> {
+  (element?: T | null): void;
+}
 interface Event<T> extends State {
   entry: ResizeObserverEntry;
-  observe: (element?: T) => void;
+  observe: Observe<T>;
   unobserve: () => void;
 }
 interface OnResize<T> {
@@ -84,8 +87,8 @@ const useDimensions = <T extends HTMLElement | null>({
     if (observerRef.current) observerRef.current.disconnect();
   }, []);
 
-  const observe = useCallback(
-    (element?: T) => {
+  const observe = useCallback<Observe<T>>(
+    (element) => {
       if (element && element !== ref.current) {
         unobserve();
         ref.current = element;
