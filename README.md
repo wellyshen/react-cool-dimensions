@@ -78,6 +78,8 @@ const App = () => {
 };
 ```
 
+> 💡 You don't have to call `unobserve` when the component is unmounted, this hook will handle it for you.
+
 ### Responsive Components
 
 We have [media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries) but those are based on the browser viewport not individual elements. In some cases, we'd like to style components based on the width of a containing element rather than the browser viewport. To meet this demand there's a [proposal](https://wicg.github.io/container-queries) for **container queries**, but it still doesn't exist today...
