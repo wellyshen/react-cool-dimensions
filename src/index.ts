@@ -69,9 +69,9 @@ const useDimensions = <T extends HTMLElement | null>({
   });
   const prevSizeRef = useRef<{ width?: number; height?: number }>({});
   const prevBreakpointRef = useRef<string>();
-  const observerRef = useRef<ResizeObserver | null>(null);
-  const onResizeRef = useRef<OnResize<T> | null>(null);
-  const shouldUpdateRef = useRef<ShouldUpdate | null>(null);
+  const observerRef = useRef<ResizeObserver>();
+  const onResizeRef = useRef<OnResize<T>>();
+  const shouldUpdateRef = useRef<ShouldUpdate>();
   const warnedRef = useRef<boolean>(false);
   const ref = useRef<T>();
 
