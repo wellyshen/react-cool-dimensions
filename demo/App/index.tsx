@@ -19,14 +19,10 @@ const App: FC = () => {
     w: 250,
     h: 300,
   });
-  const {
-    observe,
-    currentBreakpoint,
-    width,
-    height,
-  } = useDimensions<HTMLDivElement>({
-    breakpoints: { XS: 0, SM: 100, MD: 200, LG: 300, XL: 400 },
-  });
+  const { observe, currentBreakpoint, width, height } =
+    useDimensions<HTMLDivElement>({
+      breakpoints: { XS: 0, SM: 100, MD: 200, LG: 300, XL: 400 },
+    });
   const ref = useRef<HTMLDivElement | null>();
 
   const resize = (x: number, y: number) => {
