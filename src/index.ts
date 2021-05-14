@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
+import useLatest from "./useLatest";
+
 export const observerErr =
   "💡 react-cool-dimensions: the browser doesn't support Resize Observer, please use polyfill: https://github.com/wellyshen/react-cool-dimensions#resizeobserver-polyfill";
 export const borderBoxWarn =
@@ -70,18 +72,10 @@ const useDimensions = <T extends HTMLElement | null>({
   const prevSizeRef = useRef<{ width?: number; height?: number }>({});
   const prevBreakpointRef = useRef<string>();
   const observerRef = useRef<ResizeObserver>();
-  const onResizeRef = useRef<OnResize<T>>();
-  const shouldUpdateRef = useRef<ShouldUpdate>();
   const warnedRef = useRef<boolean>(false);
   const ref = useRef<T>();
-
-  useEffect(() => {
-    if (onResize) onResizeRef.current = onResize;
-  }, [onResize]);
-
-  useEffect(() => {
-    if (shouldUpdate) shouldUpdateRef.current = shouldUpdate;
-  }, [shouldUpdate]);
+  const onResizeRef = useLatest<OnResize<T> | undefined>(onResize);
+  const shouldUpdateRef = useLatest<ShouldUpdate | undefined>(shouldUpdate);
 
   const unobserve = useCallback(() => {
     if (observerRef.current) observerRef.current.disconnect();
