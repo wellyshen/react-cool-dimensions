@@ -1,8 +1,8 @@
 declare module "react-cool-dimensions" {
   // Types from @types/resize-observer-browser
   interface ResizeObserverSize {
-    inlineSize: number;
-    blockSize: number;
+    readonly inlineSize: number;
+    readonly blockSize: number;
   }
 
   interface ResizeObserverEntry {
@@ -14,19 +14,19 @@ declare module "react-cool-dimensions" {
 
   // Hook types
   export interface Event<T extends HTMLElement | null = HTMLElement> {
-    currentBreakpoint: string;
-    width: number;
-    height: number;
-    entry: ResizeObserverEntry;
+    readonly currentBreakpoint: string;
+    readonly width: number;
+    readonly height: number;
+    readonly entry: ResizeObserverEntry;
     observe: (element?: T | null) => void;
     unobserve: () => void;
   }
 
   export interface State {
-    currentBreakpoint: string;
-    width: number;
-    height: number;
-    entry?: ResizeObserverEntry;
+    readonly currentBreakpoint: string;
+    readonly width: number;
+    readonly height: number;
+    readonly entry?: ResizeObserverEntry;
   }
 
   export interface ShouldUpdate {

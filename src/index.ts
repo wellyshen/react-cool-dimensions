@@ -8,16 +8,16 @@ export const borderBoxWarn =
   "💡 react-cool-dimensions: the browser doesn't support border-box size, fallback to content-box size. Please see: https://github.com/wellyshen/react-cool-dimensions#border-box-size-measurement";
 
 interface State {
-  currentBreakpoint: string;
-  width: number;
-  height: number;
-  entry?: ResizeObserverEntry;
+  readonly currentBreakpoint: string;
+  readonly width: number;
+  readonly height: number;
+  readonly entry?: ResizeObserverEntry;
 }
 interface Observe<T> {
   (element?: T | null): void;
 }
 interface Event<T> extends State {
-  entry: ResizeObserverEntry;
+  readonly entry: ResizeObserverEntry;
   observe: Observe<T>;
   unobserve: () => void;
 }
