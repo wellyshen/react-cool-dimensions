@@ -50,25 +50,21 @@ export const subtitle = css`
 `;
 
 export const frame = css`
-  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 250px;
+  height: 300px;
+  resize: both;
   border: 5px dashed #ccc;
+  overflow: auto;
+  &::-webkit-resizer {
+    background: #000;
+  }
 `;
 
 export const bp = css`
   font-size: 2rem;
   font-weight: bold;
-`;
-
-export const controller = css`
-  position: absolute;
-  right: -11px;
-  bottom: -11px;
-  width: 22px;
-  height: 22px;
-  background: #000;
-  cursor: nwse-resize;
 `;
