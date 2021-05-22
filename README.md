@@ -213,7 +213,7 @@ const App = () => {
 };
 ```
 
-> 💡 For more available types, please [check it out](https://github.com/wellyshen/react-cool-dimensions/blob/master/src/react-cool-dimensions.d.ts).
+> 💡 For more available types, please [check it out](src/react-cool-dimensions.d.ts).
 
 ## API
 
