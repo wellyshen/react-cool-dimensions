@@ -1,6 +1,6 @@
 # <em><b>REACT COOL DIMENSIONS</b></em>
 
-A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) that measure an element's size and handle [responsive components](#responsive-components) with highly-performant way, using [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver). Try it you will 👍🏻 it!
+A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) that measure an element's size and handle [responsive components](#responsive-components) with highly-performant way, using [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API). Try it you will 👍🏻 it!
 
 ❤️ it? ⭐️ it on [GitHub](https://github.com/wellyshen/react-cool-dimensions/stargazers) or [Tweet](https://twitter.com/intent/tweet?text=With%20@react-cool-dimensions,%20I%20can%20build%20a%20performant%20web%20app.%20Thanks,%20@Welly%20Shen%20🤩) about it.
 
@@ -23,7 +23,7 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 
 ## Features
 
-- 🚀 Measures element's size with highly-performant way, using [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver).
+- 🚀 Measures element's size with highly-performant way, using [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API).
 - 🎣 Easy to use, based on React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
 - 🍰 Easy to handle [responsive components](#responsive-components), provides an alternative solution to the [container queries](https://wicg.github.io/container-queries) problem.
 - 📦 Supports [border-box size measurement](#border-box-size-measurement).
@@ -51,7 +51,7 @@ $ npm install --save react-cool-dimensions
 
 `react-cool-dimensions` has a flexible [API](#api) design, it can cover simple to complex use cases for you. Here are some examples to show you how does it work.
 
-> ⚠️ [Most modern browsers support ResizeObserver natively](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver). You can also use [polyfill](#resizeobserver-polyfill) for full browser support.
+> ⚠️ [Most modern browsers support ResizeObserver natively](https://caniuse.com/?search=ResizeObserver). You can also use [polyfill](#resizeobserver-polyfill) for full browser support.
 
 ### Basic Use Case
 
@@ -249,7 +249,7 @@ The `options` provides the following configurations and event callback for you.
 
 ## ResizeObserver Polyfill
 
-[ResizeObserver has good support amongst browsers](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver), but it's not universal. You'll need to use polyfill for browsers that don't support it. Polyfills is something you should do consciously at the application level. Therefore `react-cool-dimensions` doesn't include it.
+[ResizeObserver has good support amongst browsers](https://caniuse.com/?search=ResizeObserver), but it's not universal. You'll need to use polyfill for browsers that don't support it. Polyfills is something you should do consciously at the application level. Therefore `react-cool-dimensions` doesn't include it.
 
 We recommend using [@juggle/resize-observer](https://github.com/juggle/resize-observer):
 
