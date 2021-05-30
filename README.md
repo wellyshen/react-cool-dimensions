@@ -201,11 +201,9 @@ const returnObj = useDimensions({
 
 ## Working in TypeScript
 
-This hook supports [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of element you are going to observe via the [generic type](https://www.typescriptlang.org/docs/handbook/generics.html):
+This hook supports [TypeScript](https://www.typescriptlang.org), you can tell the hook what type of element you are going to observe through the [generic type](https://www.typescriptlang.org/docs/handbook/generics.html):
 
 ```ts
-import useInView from "react-cool-dimensions";
-
 const App = () => {
   const { observe } = useDimensions<HTMLDivElement>();
 
