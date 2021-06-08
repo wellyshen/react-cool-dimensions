@@ -35,6 +35,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cornelius-behrend",
+      "name": "Cornelius",
+      "avatar_url": "https://avatars.githubusercontent.com/u/77003328?v=4",
+      "profile": "https://github.com/cornelius-behrend",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
