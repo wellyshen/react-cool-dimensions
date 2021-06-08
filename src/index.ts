@@ -107,77 +107,78 @@ const useDimensions = <T extends HTMLElement | null>({
     // eslint-disable-next-line compat/compat
     observerRef.current = new (polyfill || window.ResizeObserver)(
       ([entry]: any) => {
-        const { contentBoxSize, borderBoxSize, contentRect } = entry;
+        window.requestAnimationFrame(() => {
+          const { contentBoxSize, borderBoxSize, contentRect } = entry;
 
-        let boxSize = contentBoxSize;
-        if (useBorderBoxSize)
-          if (borderBoxSize) {
-            boxSize = borderBoxSize;
-          } else if (!warnedRef.current) {
-            console.warn(borderBoxWarn);
-            warnedRef.current = true;
+          let boxSize = contentBoxSize;
+          if (useBorderBoxSize)
+            if (borderBoxSize) {
+              boxSize = borderBoxSize;
+            } else if (!warnedRef.current) {
+              console.warn(borderBoxWarn);
+              warnedRef.current = true;
+            }
+          // @juggle/resize-observer polyfill has different data structure
+          boxSize = Array.isArray(boxSize) ? boxSize[0] : boxSize;
+
+          const width = boxSize ? boxSize.inlineSize : contentRect.width;
+          const height = boxSize ? boxSize.blockSize : contentRect.height;
+
+          if (
+            width === prevSizeRef.current.width &&
+            height === prevSizeRef.current.height
+          )
+            return;
+
+          prevSizeRef.current = { width, height };
+
+          const e = {
+            currentBreakpoint: "",
+            width,
+            height,
+            entry,
+            observe,
+            unobserve,
+          };
+
+          if (breakpoints) {
+            e.currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
+
+            if (e.currentBreakpoint !== prevBreakpointRef.current) {
+              if (onResizeRef.current) onResizeRef.current(e);
+              prevBreakpointRef.current = e.currentBreakpoint;
+            }
+          } else if (onResizeRef.current) {
+            onResizeRef.current(e);
           }
-        // @juggle/resize-observer polyfill has different data structure
-        boxSize = Array.isArray(boxSize) ? boxSize[0] : boxSize;
 
-        const width = boxSize ? boxSize.inlineSize : contentRect.width;
-        const height = boxSize ? boxSize.blockSize : contentRect.height;
+          const next = {
+            currentBreakpoint: e.currentBreakpoint,
+            width,
+            height,
+            entry,
+          };
 
-        if (
-          width === prevSizeRef.current.width &&
-          height === prevSizeRef.current.height
-        )
-          return;
+          if (shouldUpdateRef.current && !shouldUpdateRef.current(next)) return;
 
-        prevSizeRef.current = { width, height };
-
-        const e = {
-          currentBreakpoint: "",
-          width,
-          height,
-          entry,
-          observe,
-          unobserve,
-        };
-
-        if (breakpoints) {
-          e.currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
-
-          if (e.currentBreakpoint !== prevBreakpointRef.current) {
-            if (onResizeRef.current) onResizeRef.current(e);
-            prevBreakpointRef.current = e.currentBreakpoint;
+          if (
+            !shouldUpdateRef.current &&
+            breakpoints &&
+            updateOnBreakpointChange
+          ) {
+            rafId = requestAnimationFrame(() => {
+              setState((prev) =>
+                prev.currentBreakpoint !== next.currentBreakpoint ? next : prev
+              );
+            });
+            return;
           }
-        } else if (onResizeRef.current) {
-          onResizeRef.current(e);
-        }
 
-        const next = {
-          currentBreakpoint: e.currentBreakpoint,
-          width,
-          height,
-          entry,
-        };
-
-        if (shouldUpdateRef.current && !shouldUpdateRef.current(next)) return;
-
-        if (
-          !shouldUpdateRef.current &&
-          breakpoints &&
-          updateOnBreakpointChange
-        ) {
           rafId = requestAnimationFrame(() => {
-            setState((prev) =>
-              prev.currentBreakpoint !== next.currentBreakpoint ? next : prev
-            );
+            setState(next);
           });
-          return;
-        }
-
-        rafId = requestAnimationFrame(() => {
-          setState(next);
-        });
-      }
-    );
+        })
+    });
 
     observe();
 
