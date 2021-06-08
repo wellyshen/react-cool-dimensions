@@ -107,7 +107,7 @@ const useDimensions = <T extends HTMLElement | null>({
     // eslint-disable-next-line compat/compat
     observerRef.current = new (polyfill || window.ResizeObserver)(
       ([entry]: any) => {
-        window.requestAnimationFrame(() => {
+        rafId = window.requestAnimationFrame(() => {
           const { contentBoxSize, borderBoxSize, contentRect } = entry;
 
           let boxSize = contentBoxSize;
@@ -166,17 +166,13 @@ const useDimensions = <T extends HTMLElement | null>({
             breakpoints &&
             updateOnBreakpointChange
           ) {
-            rafId = requestAnimationFrame(() => {
-              setState((prev) =>
-                prev.currentBreakpoint !== next.currentBreakpoint ? next : prev
-              );
-            });
+            setState((prev) =>
+              prev.currentBreakpoint !== next.currentBreakpoint ? next : prev
+            );
             return;
           }
 
-          rafId = requestAnimationFrame(() => {
-            setState(next);
-          });
+          setState(next);
         })
     });
 
@@ -184,7 +180,7 @@ const useDimensions = <T extends HTMLElement | null>({
 
     return () => {
       unobserve();
-      if (rafId) cancelAnimationFrame(rafId);
+      if (rafId) window.cancelAnimationFrame(rafId);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
