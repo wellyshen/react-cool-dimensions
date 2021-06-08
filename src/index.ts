@@ -102,85 +102,84 @@ const useDimensions = <T extends HTMLElement | null>({
       return () => null;
     }
 
-    let rafId: number | null = null;
+    let raf: number | null = null;
 
     // eslint-disable-next-line compat/compat
-    observerRef.current = new (polyfill || window.ResizeObserver)(
-      ([entry]: any) => {
-        rafId = window.requestAnimationFrame(() => {
-          const { contentBoxSize, borderBoxSize, contentRect } = entry;
+    observerRef.current = new (polyfill || ResizeObserver)(([entry]: any) => {
+      raf = requestAnimationFrame(() => {
+        const { contentBoxSize, borderBoxSize, contentRect } = entry;
 
-          let boxSize = contentBoxSize;
-          if (useBorderBoxSize)
-            if (borderBoxSize) {
-              boxSize = borderBoxSize;
-            } else if (!warnedRef.current) {
-              console.warn(borderBoxWarn);
-              warnedRef.current = true;
-            }
-          // @juggle/resize-observer polyfill has different data structure
-          boxSize = Array.isArray(boxSize) ? boxSize[0] : boxSize;
-
-          const width = boxSize ? boxSize.inlineSize : contentRect.width;
-          const height = boxSize ? boxSize.blockSize : contentRect.height;
-
-          if (
-            width === prevSizeRef.current.width &&
-            height === prevSizeRef.current.height
-          )
-            return;
-
-          prevSizeRef.current = { width, height };
-
-          const e = {
-            currentBreakpoint: "",
-            width,
-            height,
-            entry,
-            observe,
-            unobserve,
-          };
-
-          if (breakpoints) {
-            e.currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
-
-            if (e.currentBreakpoint !== prevBreakpointRef.current) {
-              if (onResizeRef.current) onResizeRef.current(e);
-              prevBreakpointRef.current = e.currentBreakpoint;
-            }
-          } else if (onResizeRef.current) {
-            onResizeRef.current(e);
+        let boxSize = contentBoxSize;
+        if (useBorderBoxSize)
+          if (borderBoxSize) {
+            boxSize = borderBoxSize;
+          } else if (!warnedRef.current) {
+            console.warn(borderBoxWarn);
+            warnedRef.current = true;
           }
+        // @juggle/resize-observer polyfill has different data structure
+        boxSize = Array.isArray(boxSize) ? boxSize[0] : boxSize;
 
-          const next = {
-            currentBreakpoint: e.currentBreakpoint,
-            width,
-            height,
-            entry,
-          };
+        const width = boxSize ? boxSize.inlineSize : contentRect.width;
+        const height = boxSize ? boxSize.blockSize : contentRect.height;
 
-          if (shouldUpdateRef.current && !shouldUpdateRef.current(next)) return;
+        if (
+          width === prevSizeRef.current.width &&
+          height === prevSizeRef.current.height
+        )
+          return;
 
-          if (
-            !shouldUpdateRef.current &&
-            breakpoints &&
-            updateOnBreakpointChange
-          ) {
-            setState((prev) =>
-              prev.currentBreakpoint !== next.currentBreakpoint ? next : prev
-            );
-            return;
+        prevSizeRef.current = { width, height };
+
+        const e = {
+          currentBreakpoint: "",
+          width,
+          height,
+          entry,
+          observe,
+          unobserve,
+        };
+
+        if (breakpoints) {
+          e.currentBreakpoint = getCurrentBreakpoint(breakpoints, width);
+
+          if (e.currentBreakpoint !== prevBreakpointRef.current) {
+            if (onResizeRef.current) onResizeRef.current(e);
+            prevBreakpointRef.current = e.currentBreakpoint;
           }
+        } else if (onResizeRef.current) {
+          onResizeRef.current(e);
+        }
 
-          setState(next);
-        })
+        const next = {
+          currentBreakpoint: e.currentBreakpoint,
+          width,
+          height,
+          entry,
+        };
+
+        if (shouldUpdateRef.current && !shouldUpdateRef.current(next)) return;
+
+        if (
+          !shouldUpdateRef.current &&
+          breakpoints &&
+          updateOnBreakpointChange
+        ) {
+          setState((prev) =>
+            prev.currentBreakpoint !== next.currentBreakpoint ? next : prev
+          );
+          return;
+        }
+
+        setState(next);
+      });
     });
 
     observe();
 
     return () => {
       unobserve();
-      if (rafId) window.cancelAnimationFrame(rafId);
+      if (raf) cancelAnimationFrame(raf);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
