@@ -23,10 +23,7 @@ describe("useDimensions", () => {
     },
     disconnect,
   }));
-
-  const triggerObserverCb = (e: Event) => {
-    callback([e]);
-  };
+  const triggerObserverCb = (e: Event) => callback([e]);
 
   beforeEach(() => {
     jest.clearAllMocks();
