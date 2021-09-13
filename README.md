@@ -126,7 +126,7 @@ const returnObj = useDimensions({
 });
 ```
 
-> Note: `updateOnBreakpointChange` and `shouldUpdate` can't be used at the same time, `shouldUpdate` has a higher priority.
+> Note: When `updateOnBreakpointChange` and `shouldUpdate` are used at the same time, `shouldUpdate` has a higher priority.
 
 ## Border-box Size Measurement
 
