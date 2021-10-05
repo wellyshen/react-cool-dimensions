@@ -44,6 +44,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "jhrtn",
+      "name": "Joseph Horton",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17256474?v=4",
+      "profile": "http://hort.onl",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
