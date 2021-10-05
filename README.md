@@ -10,7 +10,7 @@ A React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) t
 [![npm downloads](https://img.shields.io/npm/dm/react-cool-dimensions?style=flat-square)](https://www.npmtrends.com/react-cool-dimensions)
 [![npm downloads](https://img.shields.io/npm/dt/react-cool-dimensions?style=flat-square)](https://www.npmtrends.com/react-cool-dimensions)
 [![gzip size](https://badgen.net/bundlephobia/minzip/react-cool-dimensions?label=gzip%20size&style=flat-square)](https://bundlephobia.com/result?p=react-cool-dimensions)
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange?style=flat-square)](#contributors-)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
 [![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fwellyshen%2Freact-cool-dimensions)](https://twitter.com/intent/tweet?text=With%20@react-cool-dimensions,%20I%20can%20build%20a%20performant%20web%20app.%20Thanks,%20@Welly%20Shen%20🤩)
 
@@ -184,11 +184,11 @@ const App = () => {
 
 ## Performance Optimization
 
-The `onResize` event will be triggered whenever the size of the target element is changed. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own throttled/debounced function as below. Note that in order to throttle/debounce the function correctly, it will need to be memoised else it will be recreated on every render call.
+The `onResize` event will be triggered whenever the size of the target element is changed. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own throttled/debounced function as below. Note that in order to throttle/debounce the function correctly, it will need to be memorized else it will be recreated on every render call.
 
 ```js
-import _ from "lodash";
 import { useMemo } from 'react';
+import _ from "lodash";
 
 const returnObj = useDimensions({
   onResize: useMemo(
