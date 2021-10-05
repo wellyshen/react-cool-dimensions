@@ -184,15 +184,20 @@ const App = () => {
 
 ## Performance Optimization
 
-The `onResize` event will be triggered whenever the size of the target element is changed. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own throttled/debounced function as below.
+The `onResize` event will be triggered whenever the size of the target element is changed. We can reduce the frequency of the event callback by activating the [responsive mode](#responsive-components) or implementing our own throttled/debounced function as below. Note that in order to throttle/debounce the function correctly, it will need to be memoised else it will be recreated on every render call.
 
 ```js
 import _ from "lodash";
+import { useMemo } from 'react';
 
 const returnObj = useDimensions({
-  onResize: _.throttle(() => {
-    // Triggered once per every 500 milliseconds
-  }, 500),
+  onResize: useMemo(
+    () =>
+      _.throttle(() => {
+        // Triggered once per every 500 milliseconds
+      }, 500),
+    []
+  ),
 });
 ```
 
