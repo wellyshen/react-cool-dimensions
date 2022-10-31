@@ -5,5 +5,3 @@ node_modules
 dist
 coverage
 .size-snapshot.json
-
-.idea
