@@ -9,8 +9,8 @@ export const borderBoxWarn =
 
 interface State {
   readonly currentBreakpoint: string;
-  readonly width: number;
-  readonly height: number;
+  readonly width: number | null;
+  readonly height: number | null;
   readonly entry?: ResizeObserverEntry;
 }
 interface Observe<T> {
@@ -66,8 +66,8 @@ const useDimensions = <T extends HTMLElement | null>({
 }: Options<T> = {}): Return<T> => {
   const [state, setState] = useState<State>({
     currentBreakpoint: "",
-    width: 0,
-    height: 0,
+    width: null,
+    height: null,
   });
   const prevSizeRef = useRef<{ width?: number; height?: number }>({});
   const prevBreakpointRef = useRef<string>();
@@ -86,6 +86,11 @@ const useDimensions = <T extends HTMLElement | null>({
       if (element && element !== ref.current) {
         unobserve();
         ref.current = element;
+        setState({
+          currentBreakpoint: "",
+          width: element.clientWidth,
+          height: element.clientHeight,
+        });
       }
       if (observerRef.current && ref.current)
         observerRef.current.observe(ref.current as HTMLElement);

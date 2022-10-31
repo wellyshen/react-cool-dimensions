@@ -225,14 +225,14 @@ const returnObj = useDimensions(options?: object);
 
 It's returned with the following properties.
 
-| Key                 | Type     | Default | Description                                                                                                            |
-| ------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `observe`           | function |         | To set a target element for measuring or re-start observing the current target element.                                |
-| `unobserve`         | function |         | To stop observing the current target element.                                                                          |
-| `width`             | number   |         | The width of the target element in pixel.                                                                              |
-| `height`            | number   |         | The height of the target element in pixel.                                                                             |
-| `currentBreakpoint` | string   |         | Indicates the current breakpoint of the [responsive components](#responsive-components).                               |
-| `entry`             | object   |         | The [ResizeObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry) of the target element. |
+| Key                 | Type           | Default | Description                                                                                                            |
+| ------------------- | -------------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `observe`           | function       |         | To set a target element for measuring or re-start observing the current target element.                                |
+| `unobserve`         | function       |         | To stop observing the current target element.                                                                          |
+| `width`             | number or null | null    | The width of the target element in pixel. Null while target has not mounted.                                           |
+| `height`            | number or null | null    | The height of the target element in pixel. Null while target has not mounted.Z                                         |
+| `currentBreakpoint` | string         |         | Indicates the current breakpoint of the [responsive components](#responsive-components).                               |
+| `entry`             | object         |         | The [ResizeObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry) of the target element. |
 
 ### Parameter
 
