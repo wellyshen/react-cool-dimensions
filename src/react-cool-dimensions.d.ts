@@ -24,8 +24,8 @@ declare module "react-cool-dimensions" {
 
   export interface State {
     readonly currentBreakpoint: string;
-    readonly width: number;
-    readonly height: number;
+    readonly width: number | null;
+    readonly height: number | null;
     readonly entry?: ResizeObserverEntry;
   }
 
